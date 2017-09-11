@@ -1,17 +1,14 @@
 <?php
 
 /**
- * This file is part of MetaModels/attribute_translatedalias.
+ * This file is part of MetaModels/attribute_translatedtabletext.
  *
- * (c) 2012-2016 The MetaModels team.
+ * (c) 2012-2017 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * The MetaModels extension allows the creation of multiple collections of custom items,
- * each with its own unique set of selectable attributes, with attribute extendability.
- * The Front-End modules allow you to build powerful listing and filtering of the
- * data in each collection.
+ * This project is provided in good faith and hope to be usable by anyone.
  *
  * @package    MetaModels
  * @subpackage AttributeTranslatedAlias
@@ -19,7 +16,8 @@
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Andreas Isaak <info@andreas-isaak.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2016 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2017 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_translatedalias/blob/master/LICENSE LGPL-3.0
  * @filesource
  */
@@ -77,9 +75,10 @@ class TranslatedAlias extends TranslatedReference
             $arrFieldDef['eval']['mandatory'] = false;
         }
 
-        // If "force_alias" is ture set alwaysSave to true.
-        if ($this->get('force_alias')) {
+        // If "force_alias" is true set alwaysSave and readonly to true.
+        if ($this->get('force_talias')) {
             $arrFieldDef['eval']['alwaysSave'] = true;
+            $arrFieldDef['eval']['readonly']   = true;
         }
 
         return $arrFieldDef;
@@ -132,5 +131,16 @@ class TranslatedAlias extends TranslatedReference
             $this->getMetaModel()->getActiveLanguage()
         );
         $objItem->set($this->getColName(), $arrData);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function get($strKey)
+    {
+        if ($strKey == 'force_alias') {
+            $strKey = 'force_talias';
+        }
+        return parent::get($strKey);
     }
 }
