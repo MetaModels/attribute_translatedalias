@@ -8,7 +8,7 @@
     "alias",
     "translatable"
   ],
-  "type": "contao-module",
+  "type": "contao-bundle",
   "homepage": "http://now.metamodel.me/",
   "license": "LGPL-3.0+",
   "authors": [
@@ -79,4 +79,5 @@
       "type": "vcs",
       "url": "git@gitlab.com:metamodels/core.git"
     }
-  ]}
+  ]
+}
