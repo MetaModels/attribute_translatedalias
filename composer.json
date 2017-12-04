@@ -58,7 +58,7 @@
     }
   },
   "extra": {
-    "contao-manager-plugin": "MetaModels\\AttributeTranslatedAlliasBundle\\ContaoManager\\Plugin",
+    "contao-manager-plugin": "MetaModels\\AttributeTranslatedAliasBundle\\ContaoManager\\Plugin",
     "contao": {
       "transifex": {
         "project": "metamodels",
