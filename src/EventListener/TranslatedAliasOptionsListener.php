@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/attribute_translatedalias.
  *
- * (c) 2012-2016 The MetaModels team.
+ * (c) 2012-2017 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,31 +18,38 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2016 The MetaModels team.
+ * @author     David Molineus <david.molineus@netzmacht.de>
+ * @copyright  2012-2017 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_translatedalias/blob/master/LICENSE LGPL-3.0
  * @filesource
  */
 
-namespace MetaModels\DcGeneral\Events\Table\Attribute\TranslatedAlias;
+namespace MetaModels\AttributeTranslatedAliasBundle\EventListener;
 
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\IdSerializer;
-use MenAtWork\MultiColumnWizard\Event\GetOptionsEvent;
-use MetaModels\DcGeneral\Events\BaseSubscriber;
+use MetaModels\IFactory;
+use MultiColumnWizard\Event\GetOptionsEvent;
 
 /**
  * Handle events for tl_metamodel_attribute.alias_fields.attr_id.
  */
-class Subscriber extends BaseSubscriber
+class TranslatedAliasOptionsListener
 {
     /**
-     * {@inheritdoc}
+     * MetaModel factory.
+     *
+     * @var IFactory
      */
-    protected function registerEventsInDispatcher()
+    private $factory;
+
+    /**
+     * TranslatedAliasOptionsListener constructor.
+     *
+     * @param IFactory $factory MetaModel factory.
+     */
+    public function __construct(IFactory $factory)
     {
-        $this->addListener(
-            GetOptionsEvent::NAME,
-            array($this, 'getOptions')
-        );
+        $this->factory = $factory;
     }
 
     /**
@@ -92,7 +99,8 @@ class Subscriber extends BaseSubscriber
             )->getId();
         }
 
-        $metaModel = $this->getMetaModelById($metaModelId);
+        $metaModelName = $this->factory->translateIdToMetaModelName($metaModelId);
+        $metaModel     = $this->factory->getMetaModel($metaModelName);
 
         if (!$metaModel) {
             return;

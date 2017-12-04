@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/attribute_translatedalias.
  *
- * (c) 2012-2016 The MetaModels team.
+ * (c) 2012-2017 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,24 +13,26 @@
  * The Front-End modules allow you to build powerful listing and filtering of the
  * data in each collection.
  *
- * @package     MetaModels
- * @subpackage  AttributeTranslatedAlias
- * @author      Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @author      Stefan Heimes <stefan_heimes@hotmail.com>
- * @author      Andreas Isaak <info@andreas-isaak.de>
- * @author      Sven Baumann <baumann.sv@gmail.com>
- * @copyright   2012-2016 The MetaModels team.
- * @license     https://github.com/MetaModels/attribute_translatedalias/blob/master/LICENSE LGPL-3.0
+ * @package    MetaModels
+ * @subpackage AttributeTranslatedAlias
+ * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
+ * @author     Stefan Heimes <stefan_heimes@hotmail.com>
+ * @author     Andreas Isaak <info@andreas-isaak.de>
+ * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @author     David Molineus <david.molineus@netzmacht.de>
+ * @copyright  2012-2017 The MetaModels team.
+ * @license    https://github.com/MetaModels/attribute_translatedalias/blob/master/LICENSE LGPL-3.0
  * @filesource
  */
 
-/**
+/*
  * Table tl_metamodel_attribute
  */
 
-/**
+/*
  * Add palette configuration.
  */
+
 $GLOBALS['TL_DCA']['tl_metamodel_attribute']['metapalettes']['translatedalias extends _complexattribute_'] = array
 (
     '+advanced' => array('force_talias'),
@@ -41,9 +43,10 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute']['metapalettes']['translatedalias ex
 // Get all active modules for check if attribute_translatedtext is loaded.
 $activeModules = \Contao\ModuleLoader::getActive();
 
-/**
+/*
  * Add data provider.
  */
+
 if (!in_array('metamodelsattribute_translatedtext', $activeModules)) {
     $GLOBALS['TL_DCA']['tl_metamodel_attribute']['dca_config']['data_provider']['tl_metamodel_translatedtext'] = array
     (
@@ -51,9 +54,10 @@ if (!in_array('metamodelsattribute_translatedtext', $activeModules)) {
     );
 }
 
-/**
+/*
  * Add child condition.
  */
+
 if (!in_array('metamodelsattribute_translatedtext', $activeModules)) {
     $GLOBALS['TL_DCA']['tl_metamodel_attribute']['dca_config']['childCondition'][] = array
     (
@@ -79,9 +83,10 @@ if (!in_array('metamodelsattribute_translatedtext', $activeModules)) {
     );
 }
 
-/**
+/*
  * Add field configuration.
  */
+
 $GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['talias_fields'] = array
 (
     'label'                 => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['alias_fields'],

@@ -15,15 +15,18 @@
  * @filesource
  */
 
-namespace MetaModels\Test\Attribute\TranslatedAlias;
+namespace MetaModels\AttributeTranslatedAliasBundle\Test\Attribute;
 
-use MetaModels\Attribute\TranslatedAlias\TranslatedAlias;
+use Doctrine\DBAL\Connection;
+use MetaModels\AttributeTranslatedAliasBundle\Attribute\TranslatedAlias;
 use MetaModels\IMetaModel;
+use PHPUnit\Framework\TestCase;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Unit tests to test class Alias.
  */
-class TranslatedAliasTest extends \PHPUnit_Framework_TestCase
+class TranslatedAliasTest extends TestCase
 {
     /**
      * Mock a MetaModel.
@@ -35,11 +38,7 @@ class TranslatedAliasTest extends \PHPUnit_Framework_TestCase
      */
     protected function mockMetaModel($language, $fallbackLanguage)
     {
-        $metaModel = $this->getMock(
-            'MetaModels\MetaModel',
-            array(),
-            array(array())
-        );
+        $metaModel = $this->getMockForAbstractClass('MetaModels\IMetaModel');
 
         $metaModel
             ->expects($this->any())
@@ -60,13 +59,28 @@ class TranslatedAliasTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Mock the database connection.
+     *
+     * @return \PHPUnit_Framework_MockObject_MockObject|Connection
+     */
+    private function mockConnection()
+    {
+        return $this->getMockBuilder(Connection::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+    }
+
+    /**
      * Test that the attribute can be instantiated.
      *
      * @return void
      */
     public function testInstantiation()
     {
-        $text = new TranslatedAlias($this->mockMetaModel('en', 'en'));
-        $this->assertInstanceOf('MetaModels\Attribute\TranslatedAlias\TranslatedAlias', $text);
+        $connection      = $this->mockConnection();
+        $eventDispatcher = $this->getMockForAbstractClass(EventDispatcherInterface::class);
+
+        $alias = new TranslatedAlias($this->mockMetaModel('en', 'en'), [], $connection, $eventDispatcher);
+        $this->assertInstanceOf(TranslatedAlias::class, $alias);
     }
 }

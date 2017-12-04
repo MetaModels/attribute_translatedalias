@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/attribute_translatedalias.
  *
- * (c) 2012-2016 The MetaModels team.
+ * (c) 2012-2017 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -16,29 +16,13 @@
  * @package    MetaModels
  * @subpackage AttributeTranslatedAlias
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
+ * @author     Stefan Heimes <stefan_heimes@hotmail.com>
+ * @author     Andreas Isaak <info@andreas-isaak.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2016 The MetaModels team.
+ * @author     David Molineus <david.molineus@netzmacht.de>
+ * @copyright  2012-2017 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_translatedalias/blob/master/LICENSE LGPL-3.0
  * @filesource
  */
 
-namespace MetaModels\Attribute\TranslatedAlias;
-
-use MetaModels\Attribute\AbstractAttributeTypeFactory;
-
-/**
- * Attribute type factory for translated alias attributes.
- */
-class AttributeTypeFactory extends AbstractAttributeTypeFactory
-{
-    /**
-     * {@inheritDoc}
-     */
-    public function __construct()
-    {
-        parent::__construct();
-        $this->typeName  = 'translatedalias';
-        $this->typeIcon  = 'system/modules/metamodelsattribute_translatedalias/html/alias.png';
-        $this->typeClass = 'MetaModels\Attribute\TranslatedAlias\TranslatedAlias';
-    }
-}
+$GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['metapalettes']['translatedalias extends default'] = array();

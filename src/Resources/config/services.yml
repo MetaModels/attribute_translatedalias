@@ -1,0 +1,15 @@
+services:
+  metamodels.attribute_translatedalias.factory:
+    class: MetaModels\AttributeTranslatedAliasBundle\Attribute\AttributeTypeFactory
+    arguments:
+      - "@database_connection"
+      - "@event_dispatcher"
+    tags:
+      - { name: metamodels.attribute_factory }
+
+  metamodels.attribute_translatedalias.listeners.translated_alias_options:
+    class: MetaModels\DcGeneral\Events\Table\Attribute\TranslatedAlias\TranslatedAliasOptionsListener
+    arguments:
+      - '@metamodels.factory'
+    tags:
+      - { name: kernel.event_listener, event: men-at-work.multi-column-wizard.get-options, method: getOptions }
