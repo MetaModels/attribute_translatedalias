@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/attribute_translatedalias.
  *
- * (c) 2012-2016 The MetaModels team.
+ * (c) 2012-2018 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -19,7 +19,8 @@
  * @author      Stefan Heimes <stefan_heimes@hotmail.com>
  * @author      Andreas Isaak <info@andreas-isaak.de>
  * @author      Sven Baumann <baumann.sv@gmail.com>
- * @copyright   2012-2016 The MetaModels team.
+ * @author      Ingolf Steinhardt <info@e-spin.de>
+ * @copyright   2012-2018 The MetaModels team.
  * @license     https://github.com/MetaModels/attribute_translatedalias/blob/master/LICENSE LGPL-3.0
  * @filesource
  */
@@ -96,6 +97,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['talias_fields'] = array
                 'label'                 => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['field_attribute'],
                 'exclude'               => true,
                 'inputType'             => 'select',
+                'reference'             => &$GLOBALS['TL_LANG']['METAMODELS_SYSTEM_COLUMNS'],
                 'eval' => array
                 (
                     'style'             => 'width:600px',
