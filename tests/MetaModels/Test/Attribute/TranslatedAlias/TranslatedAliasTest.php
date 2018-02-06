@@ -19,11 +19,12 @@ namespace MetaModels\Test\Attribute\TranslatedAlias;
 
 use MetaModels\Attribute\TranslatedAlias\TranslatedAlias;
 use MetaModels\IMetaModel;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests to test class Alias.
  */
-class TranslatedAliasTest extends \PHPUnit_Framework_TestCase
+class TranslatedAliasTest extends TestCase
 {
     /**
      * Mock a MetaModel.
@@ -35,11 +36,7 @@ class TranslatedAliasTest extends \PHPUnit_Framework_TestCase
      */
     protected function mockMetaModel($language, $fallbackLanguage)
     {
-        $metaModel = $this->getMock(
-            'MetaModels\MetaModel',
-            array(),
-            array(array())
-        );
+        $metaModel = $this->getMockBuilder('MetaModels\IMetaModel')->getMockForAbstractClass();
 
         $metaModel
             ->expects($this->any())
