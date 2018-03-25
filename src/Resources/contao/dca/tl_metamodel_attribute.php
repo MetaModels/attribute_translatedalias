@@ -22,6 +22,7 @@
  * @author      Sven Baumann <baumann.sv@gmail.com>
  * @author      David Molineus <david.molineus@netzmacht.de>
  * @author      Ingolf Steinhardt <info@e-spin.de>
+ * @author      Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @copyright   2012-2018 The MetaModels team.
  * @license     https://github.com/MetaModels/attribute_translatedalias/blob/master/LICENSE LGPL-3.0
  * @filesource
@@ -103,7 +104,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['talias_fields'] = array
                 'label'                 => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['field_attribute'],
                 'exclude'               => true,
                 'inputType'             => 'select',
-                'reference'             => &$GLOBALS['TL_LANG']['METAMODELS_SYSTEM_COLUMNS'],
+                'reference'             => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['select_values'],
                 'eval' => array
                 (
                     'style'             => 'width:600px',
