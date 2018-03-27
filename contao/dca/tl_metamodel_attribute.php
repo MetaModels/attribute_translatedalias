@@ -106,6 +106,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['talias_fields'] = array
             ),
         ),
     ),
+    'sql'                     => 'blob NULL'
 );
 
 $GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['force_talias'] = array
@@ -117,4 +118,5 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['force_talias'] = array
     (
         'tl_class' => 'cbx w50'
     ),
+    'sql'                     => 'char(1) NOT NULL default \'\''
 );
