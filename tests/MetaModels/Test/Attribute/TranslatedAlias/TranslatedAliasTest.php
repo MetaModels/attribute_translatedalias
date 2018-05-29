@@ -10,6 +10,7 @@
  * @package    MetaModels
  * @subpackage Tests
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
+ * @author     Sven Baumann <baumann.sv@gmail.com>
  * @copyright  The MetaModels team.
  * @license    LGPL.
  * @filesource
@@ -36,7 +37,7 @@ class TranslatedAliasTest extends TestCase
      */
     protected function mockMetaModel($language, $fallbackLanguage)
     {
-        $metaModel = $this->getMockBuilder('MetaModels\IMetaModel')->getMockForAbstractClass();
+        $metaModel = $this->getMockBuilder(IMetaModel::class)->getMockForAbstractClass();
 
         $metaModel
             ->expects($this->any())
@@ -64,6 +65,6 @@ class TranslatedAliasTest extends TestCase
     public function testInstantiation()
     {
         $text = new TranslatedAlias($this->mockMetaModel('en', 'en'));
-        $this->assertInstanceOf('MetaModels\Attribute\TranslatedAlias\TranslatedAlias', $text);
+        $this->assertInstanceOf(TranslatedAlias::class, $text);
     }
 }

@@ -26,7 +26,7 @@
 /**
  * Register the templates
  */
-TemplateLoader::addFiles(
+\Contao\TemplateLoader::addFiles(
     [
         'mm_attr_translatedalias' => 'system/modules/metamodelsattribute_translatedalias/templates',
     ]
