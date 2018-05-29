@@ -26,7 +26,7 @@
 
 namespace MetaModels\DcGeneral\Events\Table\Attribute\TranslatedAlias;
 
-use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\IdSerializer;
+use ContaoCommunityAlliance\DcGeneral\Data\ModelId;
 use MenAtWork\MultiColumnWizard\Event\GetOptionsEvent;
 use MetaModels\DcGeneral\Events\BaseSubscriber;
 
@@ -88,7 +88,7 @@ class Subscriber extends BaseSubscriber
         $model       = $event->getModel();
         $metaModelId = $model->getProperty('pid');
         if (!$metaModelId) {
-            $metaModelId = IdSerializer::fromSerialized(
+            $metaModelId = ModelId::fromSerialized(
                 $event->getEnvironment()->getInputProvider()->getValue('pid')
             )->getId();
         }
