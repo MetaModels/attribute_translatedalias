@@ -155,7 +155,7 @@ class TranslatedAlias extends TranslatedReference
     {
         $strField = \trim($strField);
 
-        if (\in_array ($strField, $this->getMetaModelsSystemColumns())) {
+        if (\in_array($strField, $this->getMetaModelsSystemColumns())) {
             return true;
         }
 
