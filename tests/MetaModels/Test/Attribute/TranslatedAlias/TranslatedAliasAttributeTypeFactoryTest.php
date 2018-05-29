@@ -42,7 +42,7 @@ class TranslatedAliasAttributeTypeFactoryTest extends AttributeTypeFactoryTest
      */
     protected function mockMetaModel($tableName, $language, $fallbackLanguage)
     {
-        $metaModel = $this->getMockBuilder(IMetaModel::class)->getMockForAbstractClass();
+        $metaModel = $this->getMockBuilder(IMetaModel::class)->setMethods([])->setConstructorArgs([[]])->getMock();
 
         $metaModel
             ->expects($this->any())

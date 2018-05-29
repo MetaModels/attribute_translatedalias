@@ -37,7 +37,7 @@ class TranslatedAliasTest extends TestCase
      */
     protected function mockMetaModel($language, $fallbackLanguage)
     {
-        $metaModel = $this->getMockBuilder(IMetaModel::class)->getMockForAbstractClass();
+        $metaModel = $this->getMockBuilder(IMetaModel::class)->setMethods([])->setConstructorArgs([[]])->getMock();
 
         $metaModel
             ->expects($this->any())
