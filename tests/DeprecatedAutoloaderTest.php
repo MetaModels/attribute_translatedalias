@@ -67,7 +67,7 @@ class DeprecatedAutoloaderTest extends TestCase
      */
     public function testDeprecatedClassesAreAliased($oldClass, $newClass)
     {
-        $this->assertTrue(class_exists($oldClass), sprintf('Class TranslatedAlias "%s" is not found.', $oldClass));
+        $this->assertTrue(\class_exists($oldClass), \sprintf('Class TranslatedAlias "%s" is not found.', $oldClass));
 
         $oldClassReflection = new \ReflectionClass($oldClass);
         $newClassReflection = new \ReflectionClass($newClass);

@@ -27,7 +27,7 @@
 
 namespace MetaModels\AttributeTranslatedAliasBundle\EventListener;
 
-use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\IdSerializer;
+use ContaoCommunityAlliance\DcGeneral\Data\ModelId;
 use MetaModels\IFactory;
 use MultiColumnWizard\Event\GetOptionsEvent;
 
@@ -95,7 +95,7 @@ class TranslatedAliasOptionsListener
         $model       = $event->getModel();
         $metaModelId = $model->getProperty('pid');
         if (!$metaModelId) {
-            $metaModelId = IdSerializer::fromSerialized(
+            $metaModelId = ModelId::fromSerialized(
                 $event->getEnvironment()->getInputProvider()->getValue('pid')
             )->getId();
         }
@@ -107,7 +107,7 @@ class TranslatedAliasOptionsListener
             return;
         }
 
-        $result = array();
+        $result = [];
 
         // Add meta fields.
         $result['meta'] = self::getMetaModelsSystemColumns();
@@ -118,7 +118,7 @@ class TranslatedAliasOptionsListener
                 continue;
             }
 
-            $result['attributes'][$attribute->getColName()] = sprintf(
+            $result['attributes'][$attribute->getColName()] = \sprintf(
                 '%s [%s]',
                 $attribute->getName(),
                 $attribute->get('type')

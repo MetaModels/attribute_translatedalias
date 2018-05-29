@@ -44,7 +44,7 @@ class TranslatedAliasAttributeTypeFactoryTest extends TestCase
      */
     protected function mockMetaModel($tableName, $language, $fallbackLanguage)
     {
-        $metaModel = $this->getMockForAbstractClass(IMetaModel::class);
+        $metaModel = $this->getMockBuilder(IMetaModel::class)->setMethods([])->setConstructorArgs([[]])->getMock();
 
         $metaModel
             ->expects($this->any())
@@ -86,7 +86,7 @@ class TranslatedAliasAttributeTypeFactoryTest extends TestCase
         $connection      = $this->mockConnection();
         $eventDispatcher = $this->getMockForAbstractClass(EventDispatcherInterface::class);
 
-        return array(new AttributeTypeFactory($connection, $eventDispatcher));
+        return [new AttributeTypeFactory($connection, $eventDispatcher)];
     }
 
     /**
@@ -100,8 +100,7 @@ class TranslatedAliasAttributeTypeFactoryTest extends TestCase
         $eventDispatcher = $this->getMockForAbstractClass(EventDispatcherInterface::class);
 
         $factory   = new AttributeTypeFactory($connection, $eventDispatcher);
-        $values    = array(
-        );
+        $values    = [];
         $attribute = $factory->createInstance(
             $values,
             $this->mockMetaModel('mm_test', 'de', 'en')
