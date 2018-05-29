@@ -48,19 +48,19 @@ class TranslatedAlias extends TranslatedReference
     {
         return array_merge(
             parent::getAttributeSettingNames(),
-            array(
+            [
                 'talias_fields',
                 'isunique',
                 'force_talias',
                 'alwaysSave'
-            )
+            ]
         );
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getFieldDefinition($arrOverrides = array())
+    public function getFieldDefinition($arrOverrides = [])
     {
         $arrFieldDef = parent::getFieldDefinition($arrOverrides);
 
@@ -91,7 +91,7 @@ class TranslatedAlias extends TranslatedReference
             return;
         }
 
-        $arrAlias = array();
+        $arrAlias = [];
         foreach (deserialize($this->get('talias_fields')) as $strAttribute) {
             if ($this->isMetaField($strAttribute['field_attribute'])) {
                 $strField   = $strAttribute['field_attribute'];
@@ -115,9 +115,9 @@ class TranslatedAlias extends TranslatedReference
             // Ensure uniqueness.
             $strLanguage  = $this->getMetaModel()->getActiveLanguage();
             $strBaseAlias = $strAlias;
-            $arrIds       = array($objItem->get('id'));
+            $arrIds       = [$objItem->get('id')];
             $intCount     = 2;
-            while (array_diff($this->searchForInLanguages($strAlias, array($strLanguage)), $arrIds)) {
+            while (array_diff($this->searchForInLanguages($strAlias, [$strLanguage]), $arrIds)) {
                 $strAlias = $strBaseAlias . '-' . ($intCount++);
             }
         }
@@ -125,10 +125,9 @@ class TranslatedAlias extends TranslatedReference
         $arrData = $this->widgetToValue($strAlias, $objItem->get('id'));
 
         $this->setTranslatedDataFor(
-            array
-            (
+            [
                 $objItem->get('id') => $arrData
-            ),
+            ],
             $this->getMetaModel()->getActiveLanguage()
         );
         $objItem->set($this->getColName(), $arrData);
