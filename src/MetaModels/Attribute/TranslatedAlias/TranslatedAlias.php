@@ -46,21 +46,21 @@ class TranslatedAlias extends TranslatedReference
      */
     public function getAttributeSettingNames()
     {
-        return array_merge(
+        return \array_merge(
             parent::getAttributeSettingNames(),
-            array(
+            [
                 'talias_fields',
                 'isunique',
                 'force_talias',
                 'alwaysSave'
-            )
+            ]
         );
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getFieldDefinition($arrOverrides = array())
+    public function getFieldDefinition($arrOverrides = [])
     {
         $arrFieldDef = parent::getFieldDefinition($arrOverrides);
 
@@ -91,8 +91,8 @@ class TranslatedAlias extends TranslatedReference
             return;
         }
 
-        $arrAlias = array();
-        foreach (deserialize($this->get('talias_fields')) as $strAttribute) {
+        $arrAlias = [];
+        foreach (\deserialize($this->get('talias_fields')) as $strAttribute) {
             if ($this->isMetaField($strAttribute['field_attribute'])) {
                 $strField   = $strAttribute['field_attribute'];
                 $arrAlias[] = $objItem->get($strField);
@@ -103,11 +103,11 @@ class TranslatedAlias extends TranslatedReference
         }
 
         $dispatcher   = $this->getMetaModel()->getServiceContainer()->getEventDispatcher();
-        $replaceEvent = new ReplaceInsertTagsEvent(implode('-', $arrAlias));
+        $replaceEvent = new ReplaceInsertTagsEvent(\implode('-', $arrAlias));
         $dispatcher->dispatch(ContaoEvents::CONTROLLER_REPLACE_INSERT_TAGS, $replaceEvent);
 
         // Implode with '-', replace inserttags and strip HTML elements.
-        $strAlias = standardize(strip_tags($replaceEvent->getBuffer()));
+        $strAlias = \standardize(\strip_tags($replaceEvent->getBuffer()));
 
         // We need to fetch the attribute values for all attributes in the alias_fields and update the database
         // and the model accordingly.
@@ -115,9 +115,9 @@ class TranslatedAlias extends TranslatedReference
             // Ensure uniqueness.
             $strLanguage  = $this->getMetaModel()->getActiveLanguage();
             $strBaseAlias = $strAlias;
-            $arrIds       = array($objItem->get('id'));
+            $arrIds       = [$objItem->get('id')];
             $intCount     = 2;
-            while (array_diff($this->searchForInLanguages($strAlias, array($strLanguage)), $arrIds)) {
+            while (\array_diff($this->searchForInLanguages($strAlias, [$strLanguage]), $arrIds)) {
                 $strAlias = $strBaseAlias . '-' . ($intCount++);
             }
         }
@@ -125,10 +125,9 @@ class TranslatedAlias extends TranslatedReference
         $arrData = $this->widgetToValue($strAlias, $objItem->get('id'));
 
         $this->setTranslatedDataFor(
-            array
-            (
+            [
                 $objItem->get('id') => $arrData
-            ),
+            ],
             $this->getMetaModel()->getActiveLanguage()
         );
         $objItem->set($this->getColName(), $arrData);
@@ -154,9 +153,9 @@ class TranslatedAlias extends TranslatedReference
      */
     protected function isMetaField($strField)
     {
-        $strField = trim($strField);
+        $strField = \trim($strField);
 
-        if (in_array($strField, $this->getMetaModelsSystemColumns())) {
+        if (\in_array($strField, $this->getMetaModelsSystemColumns())) {
             return true;
         }
 
