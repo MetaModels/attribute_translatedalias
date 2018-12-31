@@ -12,4 +12,4 @@ services:
     arguments:
       - '@metamodels.factory'
     tags:
-      - { name: kernel.event_listener, event: men-at-work.multi-column-wizard.get-options, method: getOptions }
+      - { name: kernel.event_listener, event: men-at-work.multi-column-wizard-bundle.get-options, method: getOptions }
