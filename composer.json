@@ -42,8 +42,7 @@
   },
   "require-dev": {
     "contao/manager-bundle": "^4.4",
-    "phpcq/all-tasks": "^1.2",
-    "metamodels/base-unit-tests": "^1.0.4"
+    "phpcq/all-tasks": "^1.2"
   },
   "autoload": {
     "psr-4": {
