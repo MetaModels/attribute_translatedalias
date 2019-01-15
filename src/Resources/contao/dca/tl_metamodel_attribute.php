@@ -36,25 +36,12 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute']['metapalettes']['translatedalias ex
     '+display'  => ['talias_fields after description']
 ];
 
-
-// Get all active modules for check if attribute_translatedtext is loaded.
-$activeModules = \Contao\ModuleLoader::getActive();
-
-/*
- * Add data provider.
- */
-
-if (!in_array('metamodelsattribute_translatedtext', $activeModules)) {
+if (class_exists(MetaModels\AttributeTranslatedTextBundle\Attribute\TranslatedText::class)) {
+    // Add data provider.
     $GLOBALS['TL_DCA']['tl_metamodel_attribute']['dca_config']['data_provider']['tl_metamodel_translatedtext'] = [
         'source' => 'tl_metamodel_translatedtext'
     ];
-}
-
-/*
- * Add child condition.
- */
-
-if (!in_array('metamodelsattribute_translatedtext', $activeModules)) {
+    // Add child condition.
     $GLOBALS['TL_DCA']['tl_metamodel_attribute']['dca_config']['childCondition'][] = [
         'from'   => 'tl_metamodel_attribute',
         'to'     => 'tl_metamodel_translatedtext',
