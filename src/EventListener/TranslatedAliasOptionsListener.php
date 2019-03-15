@@ -14,32 +14,39 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @copyright  2012-2019 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_translatedalias/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
-namespace MetaModels\DcGeneral\Events\Table\Attribute\TranslatedAlias;
+namespace MetaModels\AttributeTranslatedAliasBundle\EventListener;
 
 use ContaoCommunityAlliance\DcGeneral\Data\ModelId;
-use MenAtWork\MultiColumnWizard\Event\GetOptionsEvent;
-use MetaModels\DcGeneral\Events\BaseSubscriber;
+use MenAtWork\MultiColumnWizardBundle\Event\GetOptionsEvent;
+use MetaModels\IFactory;
 
 /**
  * Handle events for tl_metamodel_attribute.alias_fields.attr_id.
  */
-class Subscriber extends BaseSubscriber
+class TranslatedAliasOptionsListener
 {
     /**
-     * {@inheritdoc}
+     * MetaModel factory.
+     *
+     * @var IFactory
      */
-    protected function registerEventsInDispatcher()
+    private $factory;
+
+    /**
+     * TranslatedAliasOptionsListener constructor.
+     *
+     * @param IFactory $factory MetaModel factory.
+     */
+    public function __construct(IFactory $factory)
     {
-        $this->addListener(
-            GetOptionsEvent::NAME,
-            [$this, 'getOptions']
-        );
+        $this->factory = $factory;
     }
 
     /**
@@ -89,7 +96,8 @@ class Subscriber extends BaseSubscriber
             )->getId();
         }
 
-        $metaModel = $this->getMetaModelById($metaModelId);
+        $metaModelName = $this->factory->translateIdToMetaModelName($metaModelId);
+        $metaModel     = $this->factory->getMetaModel($metaModelName);
 
         if (!$metaModel) {
             return;

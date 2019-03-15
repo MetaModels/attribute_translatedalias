@@ -16,22 +16,71 @@
  * @author     Andreas Isaak <info@andreas-isaak.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @author     David Molineus <david.molineus@netzmacht.de>
  * @copyright  2012-2019 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_translatedalias/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
-namespace MetaModels\Attribute\TranslatedAlias;
+namespace MetaModels\AttributeTranslatedAliasBundle\Attribute;
 
+use Contao\System;
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\ReplaceInsertTagsEvent;
+use Doctrine\DBAL\Connection;
 use MetaModels\Attribute\TranslatedReference;
+use MetaModels\IMetaModel;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * This is the MetaModelAttribute class for handling translated text fields.
  */
 class TranslatedAlias extends TranslatedReference
 {
+    /**
+     * The event dispatcher.
+     *
+     * @var EventDispatcherInterface
+     */
+    private $eventDispatcher;
+
+    /**
+     * Instantiate an MetaModel attribute.
+     *
+     * Note that you should not use this directly but use the factory classes to instantiate attributes.
+     *
+     * @param IMetaModel               $objMetaModel    The MetaModel instance this attribute belongs to.
+     *
+     * @param array $arrData                            The information array, for attribute information, refer to
+     *                                                  documentation of table tl_metamodel_attribute and documentation
+     *                                                  of the certain attribute classes for information what values are
+     *                                                  understood.
+     *
+     * @param Connection               $connection      Database connection.
+     *
+     * @param EventDispatcherInterface $eventDispatcher The event dispatcher.
+     */
+    public function __construct(
+        IMetaModel $objMetaModel,
+        array $arrData = [],
+        Connection $connection = null,
+        EventDispatcherInterface $eventDispatcher = null
+    ) {
+        parent::__construct($objMetaModel, $arrData, $connection);
+
+        if (null === $eventDispatcher) {
+            // @codingStandardsIgnoreStart Silencing errors is discouraged
+            @\trigger_error(
+                'Event dispatcher is missing. It has to be passed in the constructor. Fallback will be dropped.',
+                E_USER_DEPRECATED
+            );
+            // @codingStandardsIgnoreEnd
+            $eventDispatcher = System::getContainer()->get('event_dispatcher');
+        }
+
+        $this->eventDispatcher = $eventDispatcher;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -101,9 +150,8 @@ class TranslatedAlias extends TranslatedReference
             }
         }
 
-        $dispatcher   = $this->getMetaModel()->getServiceContainer()->getEventDispatcher();
         $replaceEvent = new ReplaceInsertTagsEvent(\implode('-', $arrAlias));
-        $dispatcher->dispatch(ContaoEvents::CONTROLLER_REPLACE_INSERT_TAGS, $replaceEvent);
+        $this->eventDispatcher->dispatch(ContaoEvents::CONTROLLER_REPLACE_INSERT_TAGS, $replaceEvent);
 
         // Implode with '-', replace inserttags and strip HTML elements.
         $strAlias = \standardize(\strip_tags($replaceEvent->getBuffer()));

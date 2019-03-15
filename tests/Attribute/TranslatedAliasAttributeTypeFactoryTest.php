@@ -12,23 +12,26 @@
  * @package    MetaModels/attribute_translatedalias
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @author     David Molineus <david.molineus@netzmacht.de>
  * @copyright  2012-2019 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_translatedalias/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
-namespace MetaModels\Test\Attribute\TranslatedAlias;
+namespace MetaModels\AttributeTranslatedAliasBundle\Test\Attribute;
 
+use Doctrine\DBAL\Connection;
 use MetaModels\Attribute\IAttributeTypeFactory;
-use MetaModels\Attribute\TranslatedAlias\AttributeTypeFactory;
+use MetaModels\AttributeTranslatedAliasBundle\Attribute\AttributeTypeFactory;
+use MetaModels\AttributeTranslatedAliasBundle\Attribute\TranslatedAlias;
 use MetaModels\IMetaModel;
-use MetaModels\Test\Attribute\AttributeTypeFactoryTest;
-use MetaModels\Attribute\TranslatedAlias\TranslatedAlias;
+use PHPUnit\Framework\TestCase;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Test the attribute factory.
  */
-class TranslatedAliasAttributeTypeFactoryTest extends AttributeTypeFactoryTest
+class TranslatedAliasAttributeTypeFactoryTest extends TestCase
 {
     /**
      * Mock a MetaModel.
@@ -64,13 +67,28 @@ class TranslatedAliasAttributeTypeFactoryTest extends AttributeTypeFactoryTest
     }
 
     /**
+     * Mock the database connection.
+     *
+     * @return \PHPUnit_Framework_MockObject_MockObject|Connection
+     */
+    private function mockConnection()
+    {
+        return $this->getMockBuilder(Connection::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+    }
+
+    /**
      * Override the method to run the tests on the attribute factories to be tested.
      *
      * @return IAttributeTypeFactory[]
      */
     protected function getAttributeFactories()
     {
-        return [new AttributeTypeFactory()];
+        $connection      = $this->mockConnection();
+        $eventDispatcher = $this->getMockForAbstractClass(EventDispatcherInterface::class);
+
+        return [new AttributeTypeFactory($connection, $eventDispatcher)];
     }
 
     /**
@@ -78,9 +96,12 @@ class TranslatedAliasAttributeTypeFactoryTest extends AttributeTypeFactoryTest
      *
      * @return void
      */
-    public function testCreateSelect()
+    public function testCreateAttribute()
     {
-        $factory   = new AttributeTypeFactory();
+        $connection      = $this->mockConnection();
+        $eventDispatcher = $this->getMockForAbstractClass(EventDispatcherInterface::class);
+
+        $factory   = new AttributeTypeFactory($connection, $eventDispatcher);
         $values    = [];
         $attribute = $factory->createInstance(
             $values,

@@ -11,19 +11,19 @@
  * This project is provided in good faith and hope to be usable by anyone.
  *
  * @package    MetaModels/attribute_translatedalias
- * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @author     Andreas Isaak <info@andreas-isaak.de>
- * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @author     David Molineus <david.molineus@netzmacht.de>
  * @copyright  2012-2019 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_translatedalias/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
+namespace MetaModels\AttributeTranslatedAliasBundle;
+
+use Symfony\Component\HttpKernel\Bundle\Bundle;
+
 /**
- * Register the templates
+ * This is the bundle class.
  */
-\Contao\TemplateLoader::addFiles(
-    [
-        'mm_attr_translatedalias' => 'system/modules/metamodelsattribute_translatedalias/templates',
-    ]
-);
+class MetaModelsAttributeTranslatedAliasBundle extends Bundle
+{
+}

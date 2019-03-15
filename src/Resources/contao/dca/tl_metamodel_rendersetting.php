@@ -12,24 +12,10 @@
  *
  * @package    MetaModels/attribute_translatedalias
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @author     Stefan Heimes <stefan_heimes@hotmail.com>
- * @author     Andreas Isaak <info@andreas-isaak.de>
- * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @author     David Molineus <david.molineus@netzmacht.de>
  * @copyright  2012-2019 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_translatedalias/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
-$GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['metasubselectpalettes']['attr_id']['translatedalias'] = [
-    'presentation' => [
-        'tl_class',
-    ],
-    'functions'    => [
-        'mandatory',
-        'alwaysSave'
-    ],
-    'overview'     => [
-        'filterable',
-        'searchable',
-    ]
-];
+$GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['metapalettes']['translatedalias extends default'] = [];
