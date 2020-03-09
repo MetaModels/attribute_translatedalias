@@ -13,3 +13,21 @@ services:
       - '@metamodels.factory'
     tags:
       - { name: kernel.event_listener, event: men-at-work.multi-column-wizard-bundle.get-options, method: getOptions }
+
+  metamodels.attribute_translatedalias.listeners.prepostfix_fields:
+    class: MetaModels\AttributeTranslatedAliasBundle\EventListener\PrepostFixFieldsListener
+    arguments:
+      - "@cca.dc-general.scope-matcher"
+      - "@metamodels.factory"
+      - "@translator"
+    tags:
+      - name: kernel.event_listener
+        event: dc-general.view.contao2backend.build-widget
+        method: buildWidget
+        priority: 100
+      - name: kernel.event_listener
+        event: dc-general.view.contao2backend.decode-property-value-for-widget
+        method: decodeValue
+      - name: kernel.event_listener
+        event: dc-general.view.contao2backend.encode-property-value-from-widget
+        method: encodeValue
