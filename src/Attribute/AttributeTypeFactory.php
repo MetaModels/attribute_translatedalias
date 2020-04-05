@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/attribute_translatedalias.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2020 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,13 +13,15 @@
  * @package    MetaModels/attribute_translatedalias
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     David Molineus <david.molineus@netzmacht.de>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
+ * @copyright  2012-2020 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_translatedalias/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
 namespace MetaModels\AttributeTranslatedAliasBundle\Attribute;
 
+use Contao\CoreBundle\Slug\Slug;
 use Doctrine\DBAL\Connection;
 use MetaModels\Attribute\AbstractAttributeTypeFactory;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -44,12 +46,20 @@ class AttributeTypeFactory extends AbstractAttributeTypeFactory
     private $eventDispatcher;
 
     /**
+     * The Contao slug generator.
+     *
+     * @var Slug
+     */
+    private $slug;
+
+    /**
      * Create a new instance.
      *
      * @param Connection               $connection      Database connection.
      * @param EventDispatcherInterface $eventDispatcher The event dispatcher.
+     * @param Slug                     $slug            The Contao slug generator.
      */
-    public function __construct(Connection $connection, EventDispatcherInterface $eventDispatcher)
+    public function __construct(Connection $connection, EventDispatcherInterface $eventDispatcher, Slug $slug)
     {
         parent::__construct();
 
@@ -58,6 +68,7 @@ class AttributeTypeFactory extends AbstractAttributeTypeFactory
         $this->typeClass       = TranslatedAlias::class;
         $this->connection      = $connection;
         $this->eventDispatcher = $eventDispatcher;
+        $this->slug            = $slug;
     }
 
     /**
@@ -65,6 +76,6 @@ class AttributeTypeFactory extends AbstractAttributeTypeFactory
      */
     public function createInstance($information, $metaModel)
     {
-        return new $this->typeClass($metaModel, $information, $this->connection, $this->eventDispatcher);
+        return new $this->typeClass($metaModel, $information, $this->connection, $this->eventDispatcher, $this->slug);
     }
 }

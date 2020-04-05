@@ -17,6 +17,7 @@
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     David Molineus <david.molineus@netzmacht.de>
+ * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @copyright  2012-2020 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_translatedalias/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -24,7 +25,7 @@
 
 namespace MetaModels\AttributeTranslatedAliasBundle\Attribute;
 
-use Ausi\SlugGenerator\SlugGenerator;
+use Contao\CoreBundle\Slug\Slug as SlugGenerator;
 use Contao\StringUtil;
 use Contao\System;
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
@@ -41,18 +42,11 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 class TranslatedAlias extends TranslatedReference
 {
     /**
-     * The alias.
+     * The Contao slug generator.
      *
-     * @var string
+     * @var SlugGenerator
      */
-    private $alias;
-
-    /**
-     * The integer prefix.
-     *
-     * @var string
-     */
-    private $integerPrefix = 'id-';
+    private $slugGenerator;
 
     /**
      * The event dispatcher.
@@ -76,12 +70,15 @@ class TranslatedAlias extends TranslatedReference
      * @param Connection               $connection      Database connection.
      *
      * @param EventDispatcherInterface $eventDispatcher The event dispatcher.
+     *
+     * @param SlugGenerator            $slugGenerator   The Contao slug generator.
      */
     public function __construct(
         IMetaModel $objMetaModel,
         array $arrData = [],
         Connection $connection = null,
-        EventDispatcherInterface $eventDispatcher = null
+        EventDispatcherInterface $eventDispatcher = null,
+        SlugGenerator $slugGenerator = null
     ) {
         parent::__construct($objMetaModel, $arrData, $connection);
 
@@ -96,6 +93,12 @@ class TranslatedAlias extends TranslatedReference
         }
 
         $this->eventDispatcher = $eventDispatcher;
+
+        if (null === $slugGenerator) {
+            $slugGenerator = System::getContainer()->get('contao.slug');
+        }
+
+        $this->slugGenerator = $slugGenerator;
     }
 
     /**
@@ -119,7 +122,7 @@ class TranslatedAlias extends TranslatedReference
                 'force_talias',
                 'alwaysSave',
                 'validAliasCharacters',
-                'skipIntegerPrefix',
+                'noIntegerPrefix',
                 'prepostfix_fields'
             ]
         );
@@ -159,28 +162,9 @@ class TranslatedAlias extends TranslatedReference
             return;
         }
 
-        // Generate alias string.
-        $this->alias = $this->generateAlias($objItem);
-
-        // Convert alias with Contao standardize or slug.
-        if ($this->get('validAliasCharacters')) {
-            $this->convertAliasBySlug();
-        } else {
-            $this->convertAliasByStandardize();
-        }
-
-        // We need to fetch the attribute values for all attributes in the alias_fields and update the database
-        // and the model accordingly.
-        if ($this->get('isunique')) {
-            // Ensure uniqueness.
-            $strLanguage  = $this->getMetaModel()->getActiveLanguage();
-            $strBaseAlias = $this->alias;
-            $arrIds       = [$objItem->get('id')];
-            $intCount     = 2;
-            while (\array_diff($this->searchForInLanguages($this->alias, [$strLanguage]), $arrIds)) {
-                $this->alias = $strBaseAlias . '-' . ($intCount++);
-            }
-        }
+        $itemId = $objItem->get('id');
+        $alias  = $this->generateAlias($objItem);
+        $slug   = $this->generateSlug($alias, $itemId);
 
         $arrData = $this->widgetToValue($this->alias, $objItem->get('id'));
 
@@ -205,50 +189,48 @@ class TranslatedAlias extends TranslatedReference
     }
 
     /**
-     * Convert alias by standardize.
+     * Generate a slug from the alias.
+     *
+     * @param string $alias  The alias.
+     *
+     * @param string $itemId The item id to check for duplicates.
+     *
+     * @return string The generated slug.
      */
-    private function convertAliasByStandardize()
+    private function generateSlug(string $alias, string $itemId): string
     {
-        // Implode with '-', replace inserttags and strip HTML elements.
-        $replaceEvent = new ReplaceInsertTagsEvent($this->alias);
-        $this->eventDispatcher->dispatch(ContaoEvents::CONTROLLER_REPLACE_INSERT_TAGS, $replaceEvent);
-        $baseAlias   = $this->alias;
-        $this->alias = StringUtil::standardize(\strip_tags($replaceEvent->getBuffer()));
+        $replaceEvent = new ReplaceInsertTagsEvent($alias);
+        $this->dispatcher->dispatch(ContaoEvents::CONTROLLER_REPLACE_INSERT_TAGS, $replaceEvent);
 
-        // Check skip integer prefix.
-        if (!$this->get('skipIntegerPrefix')) {
-            return;
+        $language    = $this->getMetaModel()->getActiveLanguage();
+        $slugOptions = ['locale' => $language];
+
+        if ($this->get('validAliasCharacters')) {
+            $slugOptions += [
+                'validChars' => $this->get('validAliasCharacters')
+            ];
         }
 
-        // Skip integer prefix is added by standardize.
-        if ($this->integerPrefix !== substr($baseAlias, 0, strlen($this->integerPrefix))
-            && $this->integerPrefix === substr($this->alias, 0, strlen($this->integerPrefix))) {
-            $this->alias = substr($this->alias, strlen($this->integerPrefix));
+        $slug = $this->slugGenerator->generate(
+            $alias,
+            $slugOptions,
+            function (string $alias) use ($itemId, $language) {
+                if (!$this->get('isunique')) {
+                    return false;
+                }
+
+                return [] !== \array_diff($this->searchForInLanguages($alias, [$language]), [$itemId]);
+            },
+            $this->get('integerPrefix') ?? 'id-'
+        );
+
+        if (\is_numeric($slug[0]) && !$this->get('validAliasCharacters')) {
+            // BC mode. In prior versions, StringUtil::standardize was used to generate the alias
+            // which always added an prefix for aliases starting with a number.
+            $slug = 'id-' . $slug;
         }
 
-        return;
-    }
-
-    /**
-     * Convert alias by slug.
-     */
-    private function convertAliasBySlug()
-    {
-        $slugOptions = [
-            'locale'     => $this->getMetaModel()->getActiveLanguage(),
-            'validChars' => $this->get('validAliasCharacters')
-        ];
-
-        $slugGenerator = new SlugGenerator();
-        $baseAlias     = StringUtil::prepareSlug($this->alias);
-        $this->alias   = $slugGenerator->generate($baseAlias, $slugOptions);
-
-        // Add integer prefix.
-        if (!$this->get('skipIntegerPrefix') && preg_match('/^[1-9]\d*$/', $this->alias)) {
-            $this->alias = $this->integerPrefix . $this->alias;
-        }
-
-        return;
+        return $slug;
     }
 
     /**
@@ -258,30 +240,30 @@ class TranslatedAlias extends TranslatedReference
      *
      * @return string
      */
-    private function generateAlias(IItem $objItem)
+    private function generateAlias(IItem $objItem): string
     {
         $activeLanguage = $this->getMetaModel()->getActiveLanguage();
-        $arrAlias       = [];
+        $parts          = [];
 
         if (!empty($this->get('prepostfix_fields')[$activeLanguage]['talias_prefix'])) {
-            $arrAlias[] = $this->get('prepostfix_fields')[$activeLanguage]['talias_prefix'];
+            $parts[] = $this->get('prepostfix_fields')[$activeLanguage]['talias_prefix'];
         }
 
-        foreach (\deserialize($this->get('talias_fields')) as $strAttribute) {
-            if ($this->isMetaField($strAttribute['field_attribute'])) {
-                $strField   = $strAttribute['field_attribute'];
-                $arrAlias[] = $objItem->get($strField);
+        foreach (\deserialize($this->get('talias_fields')) as $aliasField) {
+            if ($this->isMetaField($aliasField['field_attribute'])) {
+                $attribute = $aliasField['field_attribute'];
+                $parts[]   = $objItem->get($attribute);
             } else {
-                $arrValues  = $objItem->parseAttribute($strAttribute['field_attribute'], 'text', null);
-                $arrAlias[] = $arrValues['text'];
+                $arrValues = $objItem->parseAttribute($aliasField['field_attribute'], 'text', null);
+                $parts[]   = $arrValues['text'];
             }
         }
 
         if (!empty($this->get('prepostfix_fields')[$activeLanguage]['talias_postfix'])) {
-            $arrAlias[] = $this->get('prepostfix_fields')[$activeLanguage]['talias_postfix'];
+            $parts[] = $this->get('prepostfix_fields')[$activeLanguage]['talias_postfix'];
         }
 
-        return \implode('-', $arrAlias);
+        return \implode('-', $parts);
     }
 
 
@@ -292,7 +274,7 @@ class TranslatedAlias extends TranslatedReference
      *
      * @return boolean True => Yes we have | False => nope.
      */
-    protected function isMetaField($strField)
+    protected function isMetaField($strField): bool
     {
         $strField = \trim($strField);
 

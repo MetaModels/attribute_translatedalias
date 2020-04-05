@@ -33,7 +33,7 @@
 
 $GLOBALS['TL_DCA']['tl_metamodel_attribute']['metapalettes']['translatedalias extends _complexattribute_'] = [
     '+advanced' => ['force_talias'],
-    '+display'  => ['validAliasCharacters', 'skipIntegerPrefix', 'prepostfix_fields', 'talias_fields after description']
+    '+display'  => ['validAliasCharacters', 'noIntegerPrefix', 'prepostfix_fields', 'talias_fields after description']
 ];
 
 if (class_exists(MetaModels\AttributeTranslatedTextBundle\Attribute\TranslatedText::class)) {
@@ -61,9 +61,6 @@ if (class_exists(MetaModels\AttributeTranslatedTextBundle\Attribute\TranslatedTe
     ];
 }
 
-/*
- * Add field configuration.
- */
 $GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['validAliasCharacters'] = [
     'label'            => &$GLOBALS['TL_LANG']['tl_page']['validAliasCharacters'],
     'exclude'          => true,
@@ -81,8 +78,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['validAliasCharacters'] =
     'sql'              => "varchar(255) NOT NULL default ''"
 ];
 
-$GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['skipIntegerPrefix'] = [
-    'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['skipIntegerPrefix'],
+$GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['noIntegerPrefix'] = [
+    'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['noIntegerPrefix'],
     'exclude'   => true,
     'inputType' => 'checkbox',
     'default'   => 1,

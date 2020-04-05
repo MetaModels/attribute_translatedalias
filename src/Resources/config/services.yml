@@ -4,6 +4,7 @@ services:
     arguments:
       - "@database_connection"
       - "@event_dispatcher"
+      - "@contao.slug"
     tags:
       - { name: metamodels.attribute_factory }
 

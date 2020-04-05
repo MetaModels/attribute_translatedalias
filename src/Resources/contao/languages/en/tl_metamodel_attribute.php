@@ -23,9 +23,9 @@
  * Fields
  */
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['typeOptions']['translatedalias'] = 'Translated alias';
-$GLOBALS['TL_LANG']['tl_metamodel_attribute']['skipIntegerPrefix'][0]           = 'Skip integer prefix';
-$GLOBALS['TL_LANG']['tl_metamodel_attribute']['skipIntegerPrefix'][1]           =
-    'Skip to generate prefix "id-" if first character integer.';
+$GLOBALS['TL_LANG']['tl_metamodel_attribute']['noIntegerPrefix'][0]             = 'No integer prefix';
+$GLOBALS['TL_LANG']['tl_metamodel_attribute']['noIntegerPrefix'][1]             =
+    'Trim the "id-" prefix for alias that are numeric.';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['prepostfix_fields'][0]           = 'Alias prefix and postfix';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['prepostfix_fields'][1]           =
     'Please enter optional prefix and/or postfix.';
