@@ -33,7 +33,7 @@
 
 $GLOBALS['TL_DCA']['tl_metamodel_attribute']['metapalettes']['translatedalias extends _complexattribute_'] = [
     '+advanced' => ['force_talias'],
-    '+display'  => ['validAliasCharacters', 'noIntegerPrefix', 'prepostfix_fields', 'talias_fields after description']
+    '+display'  => ['validAliasCharacters', 'prepostfix_fields', 'noIntegerPrefix', 'talias_fields after description']
 ];
 
 if (class_exists(MetaModels\AttributeTranslatedTextBundle\Attribute\TranslatedText::class)) {
