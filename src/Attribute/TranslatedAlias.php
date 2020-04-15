@@ -200,7 +200,7 @@ class TranslatedAlias extends TranslatedReference
     private function generateSlug(string $alias, string $itemId): string
     {
         $replaceEvent = new ReplaceInsertTagsEvent($alias);
-        $this->dispatcher->dispatch(ContaoEvents::CONTROLLER_REPLACE_INSERT_TAGS, $replaceEvent);
+        $this->eventDispatcher->dispatch(ContaoEvents::CONTROLLER_REPLACE_INSERT_TAGS, $replaceEvent);
 
         $language    = $this->getMetaModel()->getActiveLanguage();
         $slugOptions = ['locale' => $language];
