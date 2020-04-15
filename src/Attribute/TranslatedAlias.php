@@ -166,7 +166,7 @@ class TranslatedAlias extends TranslatedReference
         $alias  = $this->generateAlias($objItem);
         $slug   = $this->generateSlug($alias, $itemId);
 
-        $arrData = $this->widgetToValue($this->alias, $objItem->get('id'));
+        $arrData = $this->widgetToValue($slug, $objItem->get('id'));
 
         $this->setTranslatedDataFor(
             [
