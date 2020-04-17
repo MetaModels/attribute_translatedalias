@@ -221,7 +221,7 @@ class TranslatedAlias extends TranslatedReference
 
                 return [] !== \array_diff($this->searchForInLanguages($alias, [$language]), [$itemId]);
             },
-            $this->get('integerPrefix') ?? 'id-'
+            $this->get('noIntegerPrefix') ? '' : 'id-'
         );
 
         if (\is_numeric($slug[0]) && !$this->get('validAliasCharacters')) {
