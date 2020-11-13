@@ -25,6 +25,7 @@ namespace MetaModels\AttributeTranslatedAliasBundle\EventListener;
 
 use ContaoCommunityAlliance\DcGeneral\Data\ModelId;
 use MenAtWork\MultiColumnWizardBundle\Event\GetOptionsEvent;
+use MetaModels\Attribute\IInternal;
 use MetaModels\IFactory;
 
 /**
@@ -108,6 +109,11 @@ class TranslatedAliasOptionsListener
         // Fetch all attributes except for the current attribute.
         foreach ($metaModel->getAttributes() as $attribute) {
             if ($attribute->get('id') === $model->getId()) {
+                continue;
+            }
+
+            // Hide virtual types.
+            if ($attribute instanceof IInternal) {
                 continue;
             }
 
