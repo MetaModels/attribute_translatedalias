@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/attribute_translatedalias.
  *
- * (c) 2012-2020 The MetaModels team.
+ * (c) 2012-2021 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,22 +18,21 @@
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
- * @copyright  2012-2020 The MetaModels team.
+ * @copyright  2012-2021 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_translatedalias/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
-/*
- * Table tl_metamodel_attribute
- */
-
-/*
- * Add palette configuration.
- */
+\Controller::loadDataContainer('tl_page');
 
 $GLOBALS['TL_DCA']['tl_metamodel_attribute']['metapalettes']['translatedalias extends _complexattribute_'] = [
     '+advanced' => ['force_talias'],
-    '+display'  => ['validAliasCharacters', 'prepostfix_fields', 'noIntegerPrefix', 'talias_fields after description']
+    '+display'  => [
+        'validAliasCharacters',
+        'prepostfix_fields',
+        'noIntegerPrefix',
+        'talias_fields after description'
+    ]
 ];
 
 if (class_exists(MetaModels\AttributeTranslatedTextBundle\Attribute\TranslatedText::class)) {
@@ -61,6 +60,17 @@ if (class_exists(MetaModels\AttributeTranslatedTextBundle\Attribute\TranslatedTe
     ];
 }
 
+$GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['force_talias'] = [
+    'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['force_alias'],
+    'exclude'   => true,
+    'inputType' => 'checkbox',
+    'default'   => '1',
+    'eval'      => [
+        'tl_class' => 'clr w50 cbx m12'
+    ],
+    'sql'       => 'char(1) NOT NULL default \'\''
+];
+
 $GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['validAliasCharacters'] = [
     'label'            => &$GLOBALS['TL_LANG']['tl_page']['validAliasCharacters'],
     'exclude'          => true,
@@ -82,10 +92,10 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['noIntegerPrefix'] = [
     'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['noIntegerPrefix'],
     'exclude'   => true,
     'inputType' => 'checkbox',
-    'default'   => 1,
-    'sql'       => "char(1) NOT NULL default ''",
+    'default'   => '1',
+    'sql'       => 'char(1) NOT NULL default \'\'',
     'eval'      => [
-        'tl_class' => 'clr w50'
+        'tl_class' => 'clr w50 cbx m12'
     ],
 ];
 
@@ -144,14 +154,4 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['talias_fields'] = [
         ],
     ],
     'sql'       => 'blob NULL'
-];
-
-$GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['force_talias'] = [
-    'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['force_alias'],
-    'exclude'   => true,
-    'inputType' => 'checkbox',
-    'eval'      => [
-        'tl_class' => 'cbx w50'
-    ],
-    'sql'       => 'char(1) NOT NULL default \'\''
 ];
