@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/attribute_translatedalias.
  *
- * (c) 2012-2020 The MetaModels team.
+ * (c) 2012-2021 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,7 +12,8 @@
  *
  * @package    MetaModels/attribute_translatedalias
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2020 The MetaModels team.
+ * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @copyright  2012-2021 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_translatedalias/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -87,14 +88,15 @@ class PrepostFixFieldsListener
             return;
         }
 
-        $propInfo = $event->getEnvironment()->getDataDefinition()->getPropertiesDefinition()->getProperty('prepostfix_fields');
+        $propInfo =
+            $event->getEnvironment()->getDataDefinition()->getPropertiesDefinition()->getProperty('prepostfix_fields');
         $value    = StringUtil::deserialize($event->getValue(), true);
         $extra    = $propInfo->getExtra();
 
         $newValues = [];
         $languages = $extra['columnFields']['prepostfix_language']['options'];
         foreach (array_keys($languages) as $key) {
-            if ($thisValue = $value[$key] ?? null) {
+            if ($thisValue = ($value[$key] ?? null)) {
                 $newValues[] = [
                     'prepostfix_language' => $key,
                     'talias_prefix'       => $thisValue['talias_prefix'],
@@ -129,7 +131,10 @@ class PrepostFixFieldsListener
 
         $result = [];
         foreach ($value as $k => $v) {
-            $result[$v['prepostfix_language']] = ['talias_prefix' => $v['talias_prefix'], 'talias_postfix' => $v['talias_postfix']];
+            $result[$v['prepostfix_language']] = [
+                'talias_prefix'  => $v['talias_prefix'],
+                'talias_postfix' => $v['talias_postfix']
+            ];
         }
 
         $event->setValue(serialize($result));
