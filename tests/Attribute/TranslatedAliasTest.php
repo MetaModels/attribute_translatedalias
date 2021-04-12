@@ -2,7 +2,7 @@
 /**
  * This file is part of MetaModels/attribute_translatedalias.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2021 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,21 +14,25 @@
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2019 The MetaModels team.
+ * @copyright  2012-2021 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_translatedalias/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
 namespace MetaModels\AttributeTranslatedAliasBundle\Test\Attribute;
 
+use Contao\CoreBundle\Slug\Slug;
 use Doctrine\DBAL\Connection;
 use MetaModels\AttributeTranslatedAliasBundle\Attribute\TranslatedAlias;
 use MetaModels\IMetaModel;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Unit tests to test class Alias.
+ *
+ * @covers \MetaModels\AttributeTranslatedAliasBundle\Attribute\TranslatedAlias
  */
 class TranslatedAliasTest extends TestCase
 {
@@ -45,19 +49,19 @@ class TranslatedAliasTest extends TestCase
         $metaModel = $this->getMockBuilder(IMetaModel::class)->setMethods([])->getMock();
 
         $metaModel
-            ->expects($this->any())
+            ->expects(self::any())
             ->method('getTableName')
-            ->will($this->returnValue('mm_unittest'));
+            ->willReturn('mm_unittest');
 
         $metaModel
-            ->expects($this->any())
+            ->expects(self::any())
             ->method('getActiveLanguage')
-            ->will($this->returnValue($language));
+            ->willReturn($language);
 
         $metaModel
-            ->expects($this->any())
+            ->expects(self::any())
             ->method('getFallbackLanguage')
-            ->will($this->returnValue($fallbackLanguage));
+            ->willReturn($fallbackLanguage);
 
         return $metaModel;
     }
@@ -65,7 +69,7 @@ class TranslatedAliasTest extends TestCase
     /**
      * Mock the database connection.
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|Connection
+     * @return MockObject|Connection
      */
     private function mockConnection()
     {
@@ -83,8 +87,9 @@ class TranslatedAliasTest extends TestCase
     {
         $connection      = $this->mockConnection();
         $eventDispatcher = $this->getMockForAbstractClass(EventDispatcherInterface::class);
+        $slug            = $this->createMock(Slug::class);
 
-        $alias = new TranslatedAlias($this->mockMetaModel('en', 'en'), [], $connection, $eventDispatcher);
-        $this->assertInstanceOf(TranslatedAlias::class, $alias);
+        $alias = new TranslatedAlias($this->mockMetaModel('en', 'en'), [], $connection, $eventDispatcher, $slug);
+        self::assertInstanceOf(TranslatedAlias::class, $alias);
     }
 }

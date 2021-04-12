@@ -2,7 +2,7 @@
 /**
  * This file is part of MetaModels/attribute_translatedalias.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2021 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,23 +14,27 @@
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2019 The MetaModels team.
+ * @copyright  2012-2021 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_translatedalias/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
 namespace MetaModels\AttributeTranslatedAliasBundle\Test\Attribute;
 
+use Contao\CoreBundle\Slug\Slug;
 use Doctrine\DBAL\Connection;
 use MetaModels\Attribute\IAttributeTypeFactory;
 use MetaModels\AttributeTranslatedAliasBundle\Attribute\AttributeTypeFactory;
 use MetaModels\AttributeTranslatedAliasBundle\Attribute\TranslatedAlias;
 use MetaModels\IMetaModel;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Test the attribute factory.
+ *
+ * @covers \MetaModels\AttributeTranslatedAliasBundle\Attribute\AttributeTypeFactory
  */
 class TranslatedAliasAttributeTypeFactoryTest extends TestCase
 {
@@ -50,19 +54,19 @@ class TranslatedAliasAttributeTypeFactoryTest extends TestCase
         $metaModel = $this->getMockBuilder(IMetaModel::class)->setMethods([])->getMock();
 
         $metaModel
-            ->expects($this->any())
+            ->expects(self::any())
             ->method('getTableName')
-            ->will($this->returnValue($tableName));
+            ->willReturn($tableName);
 
         $metaModel
-            ->expects($this->any())
+            ->expects(self::any())
             ->method('getActiveLanguage')
-            ->will($this->returnValue($language));
+            ->willReturn($language);
 
         $metaModel
-            ->expects($this->any())
+            ->expects(self::any())
             ->method('getFallbackLanguage')
-            ->will($this->returnValue($fallbackLanguage));
+            ->willReturn($fallbackLanguage);
 
         return $metaModel;
     }
@@ -70,7 +74,7 @@ class TranslatedAliasAttributeTypeFactoryTest extends TestCase
     /**
      * Mock the database connection.
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|Connection
+     * @return MockObject|Connection
      */
     private function mockConnection()
     {
@@ -88,8 +92,9 @@ class TranslatedAliasAttributeTypeFactoryTest extends TestCase
     {
         $connection      = $this->mockConnection();
         $eventDispatcher = $this->getMockForAbstractClass(EventDispatcherInterface::class);
+        $slug            = $this->createMock(Slug::class);
 
-        return [new AttributeTypeFactory($connection, $eventDispatcher)];
+        return [new AttributeTypeFactory($connection, $eventDispatcher, $slug)];
     }
 
     /**
@@ -101,18 +106,19 @@ class TranslatedAliasAttributeTypeFactoryTest extends TestCase
     {
         $connection      = $this->mockConnection();
         $eventDispatcher = $this->getMockForAbstractClass(EventDispatcherInterface::class);
+        $slug            = $this->createMock(Slug::class);
 
-        $factory   = new AttributeTypeFactory($connection, $eventDispatcher);
+        $factory   = new AttributeTypeFactory($connection, $eventDispatcher, $slug);
         $values    = [];
         $attribute = $factory->createInstance(
             $values,
             $this->mockMetaModel('mm_test', 'de', 'en')
         );
 
-        $this->assertInstanceOf(TranslatedAlias::class, $attribute);
+        self::assertInstanceOf(TranslatedAlias::class, $attribute);
 
         foreach ($values as $key => $value) {
-            $this->assertEquals($value, $attribute->get($key), $key);
+            self::assertEquals($value, $attribute->get($key), $key);
         }
     }
 }
