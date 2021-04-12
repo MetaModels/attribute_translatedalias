@@ -25,10 +25,8 @@ use ContaoCommunityAlliance\DcGeneral\Contao\RequestScopeDeterminator;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\BuildWidgetEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\DecodePropertyValueForWidgetEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\EncodePropertyValueFromWidgetEvent;
-use ContaoCommunityAlliance\DcGeneral\Data\ModelInterface;
 use ContaoCommunityAlliance\DcGeneral\Event\AbstractEnvironmentAwareEvent;
 use ContaoCommunityAlliance\DcGeneral\Event\AbstractModelAwareEvent;
-use MetaModels\Attribute\IAttributeFactory;
 use MetaModels\IFactory;
 use Symfony\Component\Translation\TranslatorInterface;
 
@@ -130,7 +128,7 @@ class PrepostFixFieldsListener
         $value = StringUtil::deserialize($event->getValue(), true);
 
         $result = [];
-        foreach ($value as $k => $v) {
+        foreach ($value as $v) {
             $result[$v['prepostfix_language']] = [
                 'talias_prefix'  => $v['talias_prefix'],
                 'talias_postfix' => $v['talias_postfix']
