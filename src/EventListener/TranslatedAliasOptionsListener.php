@@ -61,8 +61,8 @@ class TranslatedAliasOptionsListener
     {
         return
             ($event->getEnvironment()->getDataDefinition()->getName() === 'tl_metamodel_attribute')
-            || ($event->getPropertyName() === 'talias_fields')
-            || ($event->getSubPropertyName() === 'field_attribute');
+            && ($event->getPropertyName() === 'talias_fields')
+            && ($event->getSubPropertyName() === 'field_attribute');
     }
 
     /**
@@ -74,7 +74,7 @@ class TranslatedAliasOptionsListener
      */
     public function getOptions(GetOptionsEvent $event)
     {
-        if (null === $event->getOptions() && !$this->isEventForMe($event)) {
+        if (null !== $event->getOptions() || !$this->isEventForMe($event)) {
             return;
         }
 
