@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/attribute_translatedalias.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2022 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -16,7 +16,7 @@
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2019 The MetaModels team.
+ * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_translatedalias/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -25,6 +25,7 @@ namespace MetaModels\AttributeTranslatedAliasBundle\EventListener;
 
 use ContaoCommunityAlliance\DcGeneral\Data\ModelId;
 use MenAtWork\MultiColumnWizardBundle\Event\GetOptionsEvent;
+use MetaModels\Attribute\IInternal;
 use MetaModels\IFactory;
 
 /**
@@ -58,21 +59,10 @@ class TranslatedAliasOptionsListener
      */
     private function isEventForMe(GetOptionsEvent $event)
     {
-        $input = $event->getEnvironment()->getInputProvider();
-
-        if ($input->hasValue('type')) {
-            $type = $input->getValue('type');
-        }
-
-        if (empty($type)) {
-            $type = $event->getModel()->getProperty('type');
-        }
-
         return
-            ($event->getEnvironment()->getDataDefinition()->getName() !== 'tl_metamodel_attribute')
-            || ($type !== 'translatedalias')
-            || ($event->getPropertyName() !== 'talias_fields')
-            || ($event->getSubPropertyName() !== 'field_attribute');
+            ($event->getEnvironment()->getDataDefinition()->getName() === 'tl_metamodel_attribute')
+            && ($event->getPropertyName() === 'talias_fields')
+            && ($event->getSubPropertyName() === 'field_attribute');
     }
 
     /**
@@ -84,7 +74,7 @@ class TranslatedAliasOptionsListener
      */
     public function getOptions(GetOptionsEvent $event)
     {
-        if (self::isEventForMe($event)) {
+        if (null !== $event->getOptions() || !$this->isEventForMe($event)) {
             return;
         }
 
@@ -92,7 +82,7 @@ class TranslatedAliasOptionsListener
         $metaModelId = $model->getProperty('pid');
         if (!$metaModelId) {
             $metaModelId = ModelId::fromSerialized(
-                $event->getEnvironment()->getInputProvider()->getValue('pid')
+                $event->getEnvironment()->getInputProvider()->getParameter('pid')
             )->getId();
         }
 
@@ -105,21 +95,27 @@ class TranslatedAliasOptionsListener
 
         $result = [];
 
-        // Add meta fields.
-        $result['meta'] = self::getMetaModelsSystemColumns();
-
         // Fetch all attributes except for the current attribute.
         foreach ($metaModel->getAttributes() as $attribute) {
             if ($attribute->get('id') === $model->getId()) {
                 continue;
             }
 
+            // Hide virtual types.
+            if ($attribute instanceof IInternal) {
+                continue;
+            }
+
             $result['attributes'][$attribute->getColName()] = \sprintf(
-                '%s [%s]',
+                '%s [%s, "%s"]',
                 $attribute->getName(),
-                $attribute->get('type')
+                $attribute->get('type'),
+                $attribute->getColName()
             );
         }
+
+        // Add meta fields.
+        $result['meta'] = self::getMetaModelsSystemColumns();
 
         $event->setOptions($result);
     }

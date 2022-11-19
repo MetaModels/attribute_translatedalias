@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/attribute_translatedalias.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2021 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,7 +12,8 @@
  *
  * @package    MetaModels/attribute_translatedalias
  * @author     David Molineus <david.molineus@netzmacht.de>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @copyright  2012-2021 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_translatedalias/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -28,6 +29,8 @@ use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 
 /**
  * This test case test the extension.
+ *
+ * @covers \MetaModels\AttributeTranslatedAliasBundle\DependencyInjection\MetaModelsAttributeTranslatedAliasExtension
  */
 class MetaModelsAttributeTranslatedAliasExtensionTest extends TestCase
 {
@@ -40,8 +43,8 @@ class MetaModelsAttributeTranslatedAliasExtensionTest extends TestCase
     {
         $extension = new MetaModelsAttributeTranslatedAliasExtension();
 
-        $this->assertInstanceOf(MetaModelsAttributeTranslatedAliasExtension::class, $extension);
-        $this->assertInstanceOf(ExtensionInterface::class, $extension);
+        self::assertInstanceOf(MetaModelsAttributeTranslatedAliasExtension::class, $extension);
+        self::assertInstanceOf(ExtensionInterface::class, $extension);
     }
 
     /**
@@ -54,12 +57,12 @@ class MetaModelsAttributeTranslatedAliasExtensionTest extends TestCase
         $container = $this->getMockBuilder(ContainerBuilder::class)->getMock();
 
         $container
-            ->expects($this->exactly(2))
+            ->expects(self::exactly(3))
             ->method('setDefinition')
             ->withConsecutive(
                 [
                     'metamodels.attribute_translatedalias.factory',
-                    $this->callback(
+                    self::callback(
                         function ($value) {
                             /** @var Definition $value */
                             $this->assertInstanceOf(Definition::class, $value);
@@ -71,8 +74,8 @@ class MetaModelsAttributeTranslatedAliasExtensionTest extends TestCase
                     )
                 ],
                 [
-                    $this->anything(),
-                    $this->anything()
+                    self::anything(),
+                    self::anything()
                 ]
             );
 
