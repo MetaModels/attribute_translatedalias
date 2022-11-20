@@ -21,8 +21,5 @@
  */
 
 
-$GLOBALS['TL_LANG']['tl_metamodel_attribute']['field_attribute']                = 'Omadused';
-$GLOBALS['TL_LANG']['tl_metamodel_attribute']['prepostfix_language']['0']       = 'Keel';
-$GLOBALS['TL_LANG']['tl_metamodel_attribute']['talias_fields']['0']             = 'Aliase väljad';
-$GLOBALS['TL_LANG']['tl_metamodel_attribute']['typeOptions']['translatedalias'] = 'Tõlgitud alias';
+$GLOBALS['TL_LANG']['tl_metamodel_attribute']['field_attribute'] = 'ویژگی ها';
 
