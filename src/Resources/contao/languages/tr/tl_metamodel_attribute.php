@@ -21,8 +21,9 @@
  */
 
 
-$GLOBALS['TL_LANG']['tl_metamodel_attribute']['field_attribute']                = 'Omadused';
-$GLOBALS['TL_LANG']['tl_metamodel_attribute']['prepostfix_language']['0']       = 'Keel';
-$GLOBALS['TL_LANG']['tl_metamodel_attribute']['talias_fields']['0']             = 'Aliase väljad';
-$GLOBALS['TL_LANG']['tl_metamodel_attribute']['typeOptions']['translatedalias'] = 'Tõlgitud alias';
+$GLOBALS['TL_LANG']['tl_metamodel_attribute']['field_attribute']    = 'Özellikler';
+$GLOBALS['TL_LANG']['tl_metamodel_attribute']['force_talias']['0']  = 'Takma adı yeniden oluşturmaya zorla';
+$GLOBALS['TL_LANG']['tl_metamodel_attribute']['force_talias']['1']  = 'Bağımlı alanlardan herhangi biri değiştiğinde takma adın yeniden oluşturulmasını istiyorsanız bunu işaretleyin. Bunun, takma ada dayanan eski URL\'leri geçersiz kılacağını unutmayın.';
+$GLOBALS['TL_LANG']['tl_metamodel_attribute']['talias_fields']['0'] = 'Takma ad alanları';
+$GLOBALS['TL_LANG']['tl_metamodel_attribute']['talias_fields']['1'] = 'Bir takma adı birleştirmek için lütfen bir veya daha fazla özellik seçin.';
 
