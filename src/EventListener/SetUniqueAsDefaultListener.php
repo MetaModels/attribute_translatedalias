@@ -58,8 +58,8 @@ class SetUniqueAsDefaultListener
         $model = $event->getModel();
 
         if (false === $this->scopeDeterminator->currentScopeIsBackend()
-            && null !== $model->getId()
-            && 'isunique' !== $event->getProperty()->getName()
+            || null !== $model->getId()
+            || 'isunique' !== $event->getProperty()->getName()
         ) {
             return;
         }
