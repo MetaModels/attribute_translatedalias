@@ -24,7 +24,7 @@ use ContaoCommunityAlliance\DcGeneral\Contao\RequestScopeDeterminator;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\BuildWidgetEvent;
 
 /**
- * This class provides the attribute variant activation.
+ * This class provides the attribute unique as default.
  */
 class SetUniqueAsDefaultListener
 {
@@ -59,6 +59,8 @@ class SetUniqueAsDefaultListener
 
         if (false === $this->scopeDeterminator->currentScopeIsBackend()
             || null !== $model->getId()
+            || 'translatedalias' !== $model->getProperty('type')
+            || 'tl_metamodel_attribute' !== $event->getEnvironment()->getDataDefinition()->getName()
             || 'isunique' !== $event->getProperty()->getName()
         ) {
             return;
