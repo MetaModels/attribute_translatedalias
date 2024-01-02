@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/attribute_translatedalias.
  *
- * (c) 2012-2023 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,7 +18,7 @@
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
- * @copyright  2012-2023 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_translatedalias/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -46,32 +46,28 @@ class TranslatedAlias extends TranslatedReference
      *
      * @var SlugGenerator
      */
-    private $slugGenerator;
+    private SlugGenerator $slugGenerator;
 
     /**
      * The event dispatcher.
      *
      * @var EventDispatcherInterface
      */
-    private $eventDispatcher;
+    private EventDispatcherInterface $eventDispatcher;
 
     /**
      * Instantiate an MetaModel attribute.
      *
      * Note that you should not use this directly but use the factory classes to instantiate attributes.
      *
-     * @param IMetaModel               $objMetaModel    The MetaModel instance this attribute belongs to.
-     *
-     * @param array                    $arrData         The information array, for attribute information, refer to
-     *                                                  documentation of table tl_metamodel_attribute and documentation
-     *                                                  of the certain attribute classes for information what values are
-     *                                                  understood.
-     *
-     * @param Connection               $connection      Database connection.
-     *
-     * @param EventDispatcherInterface $eventDispatcher The event dispatcher.
-     *
-     * @param SlugGenerator            $slugGenerator   The Contao slug generator.
+     * @param IMetaModel                    $objMetaModel    The MetaModel instance this attribute belongs to.
+     * @param array                         $arrData         The information array, for attribute information, refer to
+     *                                                       documentation of table tl_metamodel_attribute and
+     *                                                       documentation of the certain attribute classes for
+     *                                                       information what values are understood.
+     * @param Connection|null               $connection      Database connection.
+     * @param EventDispatcherInterface|null $eventDispatcher The event dispatcher.
+     * @param SlugGenerator|null            $slugGenerator   The Contao slug generator.
      */
     public function __construct(
         IMetaModel $objMetaModel,
@@ -90,14 +86,20 @@ class TranslatedAlias extends TranslatedReference
             );
             // @codingStandardsIgnoreEnd
             $eventDispatcher = System::getContainer()->get('event_dispatcher');
+            assert($eventDispatcher instanceof EventDispatcherInterface);
         }
-
         $this->eventDispatcher = $eventDispatcher;
 
         if (null === $slugGenerator) {
+            // @codingStandardsIgnoreStart Silencing errors is discouraged
+            @\trigger_error(
+                'SlugGenerator is missing. It has to be passed in the constructor. Fallback will be dropped.',
+                E_USER_DEPRECATED
+            );
+            // @codingStandardsIgnoreEnd
             $slugGenerator = System::getContainer()->get('contao.slug');
+            assert($slugGenerator instanceof SlugGenerator);
         }
-
         $this->slugGenerator = $slugGenerator;
     }
 
@@ -169,6 +171,7 @@ class TranslatedAlias extends TranslatedReference
 
         $arrData = $this->widgetToValue($slug, $objItem->get('id'));
 
+        /** @psalm-suppress DeprecatedMethod */
         $this->setTranslatedDataFor(
             [
                 $objItem->get('id') => $arrData
@@ -183,7 +186,7 @@ class TranslatedAlias extends TranslatedReference
      */
     public function get($strKey)
     {
-        if ($strKey == 'force_alias') {
+        if ($strKey === 'force_alias') {
             $strKey = 'force_talias';
         }
         return parent::get($strKey);
@@ -200,8 +203,11 @@ class TranslatedAlias extends TranslatedReference
     private function generateSlug(string $alias, string $itemId): string
     {
         $replaceEvent = new ReplaceInsertTagsEvent($alias);
-        $this->eventDispatcher->dispatch($replaceEvent, ContaoEvents::CONTROLLER_REPLACE_INSERT_TAGS);
+        $dispatcher   = $this->eventDispatcher;
+        assert($dispatcher instanceof EventDispatcherInterface);
+        $dispatcher->dispatch($replaceEvent, ContaoEvents::CONTROLLER_REPLACE_INSERT_TAGS);
 
+        /** @psalm-suppress DeprecatedMethod */
         $language    = $this->getMetaModel()->getActiveLanguage();
         $slugOptions = ['locale' => $language];
 
@@ -224,11 +230,12 @@ class TranslatedAlias extends TranslatedReference
             $this->get('noIntegerPrefix') ? '' : 'id-'
         );
 
-        if ('' !== $slug
+        if (
+            '' !== $slug
             && \is_numeric($slug[0])
             && !$this->get('validAliasCharacters')
-            && !$this->get('noIntegerPrefix'))
-        {
+            && !$this->get('noIntegerPrefix')
+        ) {
             // BC mode. In prior versions, StringUtil::standardize was used to generate the alias
             // which always added a prefix for aliases starting with a number.
             $slug = 'id-' . $slug;
@@ -246,6 +253,7 @@ class TranslatedAlias extends TranslatedReference
      */
     private function generateAlias(IItem $objItem): string
     {
+        /** @psalm-suppress DeprecatedMethod */
         $activeLanguage = $this->getMetaModel()->getActiveLanguage();
         $parts          = [];
 
@@ -253,7 +261,7 @@ class TranslatedAlias extends TranslatedReference
             $parts[] = $this->get('prepostfix_fields')[$activeLanguage]['talias_prefix'];
         }
 
-        foreach (\deserialize($this->get('talias_fields')) as $aliasField) {
+        foreach (StringUtil::deserialize($this->get('talias_fields')) as $aliasField) {
             if ($this->isMetaField($aliasField['field_attribute'])) {
                 $attribute = $aliasField['field_attribute'];
                 $parts[]   = $objItem->get($attribute);

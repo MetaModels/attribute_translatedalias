@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/attribute_translatedalias.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -16,7 +16,7 @@
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2022 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_translatedalias/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -24,6 +24,8 @@
 namespace MetaModels\AttributeTranslatedAliasBundle\EventListener;
 
 use ContaoCommunityAlliance\DcGeneral\Data\ModelId;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\ContainerInterface;
+use ContaoCommunityAlliance\DcGeneral\InputProviderInterface;
 use MenAtWork\MultiColumnWizardBundle\Event\GetOptionsEvent;
 use MetaModels\Attribute\IInternal;
 use MetaModels\IFactory;
@@ -38,7 +40,7 @@ class TranslatedAliasOptionsListener
      *
      * @var IFactory
      */
-    private $factory;
+    private IFactory $factory;
 
     /**
      * TranslatedAliasOptionsListener constructor.
@@ -59,8 +61,11 @@ class TranslatedAliasOptionsListener
      */
     private function isEventForMe(GetOptionsEvent $event)
     {
+        $dataDefinition = $event->getEnvironment()->getDataDefinition();
+        assert($dataDefinition instanceof ContainerInterface);
+
         return
-            ($event->getEnvironment()->getDataDefinition()->getName() === 'tl_metamodel_attribute')
+            ($dataDefinition->getName() === 'tl_metamodel_attribute')
             && ($event->getPropertyName() === 'talias_fields')
             && ($event->getSubPropertyName() === 'field_attribute');
     }
@@ -74,16 +79,17 @@ class TranslatedAliasOptionsListener
      */
     public function getOptions(GetOptionsEvent $event)
     {
-        if (null !== $event->getOptions() || !$this->isEventForMe($event)) {
+        if (!$this->isEventForMe($event)) {
             return;
         }
 
         $model       = $event->getModel();
         $metaModelId = $model->getProperty('pid');
         if (!$metaModelId) {
-            $metaModelId = ModelId::fromSerialized(
-                $event->getEnvironment()->getInputProvider()->getParameter('pid')
-            )->getId();
+            $inputProvider = $event->getEnvironment()->getInputProvider();
+            assert($inputProvider instanceof InputProviderInterface);
+
+            $metaModelId = ModelId::fromSerialized($inputProvider->getParameter('pid'))->getId();
         }
 
         $metaModelName = $this->factory->translateIdToMetaModelName($metaModelId);
