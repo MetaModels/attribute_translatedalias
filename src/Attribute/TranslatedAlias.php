@@ -34,6 +34,8 @@ use Doctrine\DBAL\Connection;
 use MetaModels\Attribute\TranslatedReference;
 use MetaModels\IItem;
 use MetaModels\IMetaModel;
+use MetaModels\ITranslatedMetaModel;
+use RuntimeException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -207,8 +209,10 @@ class TranslatedAlias extends TranslatedReference
         assert($dispatcher instanceof EventDispatcherInterface);
         $dispatcher->dispatch($replaceEvent, ContaoEvents::CONTROLLER_REPLACE_INSERT_TAGS);
 
-        /** @psalm-suppress DeprecatedMethod */
-        $language    = $this->getMetaModel()->getActiveLanguage();
+        $metaModel = $this->getMetaModel();
+        $language  = $this->getActiveLanguage($metaModel);
+        assert('' !== $language);
+
         $slugOptions = ['locale' => $language];
 
         if ($this->get('validAliasCharacters')) {
@@ -253,9 +257,11 @@ class TranslatedAlias extends TranslatedReference
      */
     private function generateAlias(IItem $objItem): string
     {
-        /** @psalm-suppress DeprecatedMethod */
-        $activeLanguage = $this->getMetaModel()->getActiveLanguage();
-        $parts          = [];
+        $metaModel      = $this->getMetaModel();
+        $activeLanguage = $this->getActiveLanguage($metaModel);
+        assert('' !== $activeLanguage);
+
+        $parts = [];
 
         if (!empty($this->get('prepostfix_fields')[$activeLanguage]['talias_prefix'])) {
             $parts[] = $this->get('prepostfix_fields')[$activeLanguage]['talias_prefix'];
@@ -290,6 +296,7 @@ class TranslatedAlias extends TranslatedReference
     {
         $strField = \trim($strField);
 
+        /** @psalm-suppress DeprecatedMethod */
         if (\in_array($strField, $this->getMetaModelsSystemColumns())) {
             return true;
         }
@@ -302,11 +309,27 @@ class TranslatedAlias extends TranslatedReference
      *
      * @return mixed Global MetaModels System Columns
      *
+     * @deprecated Method will be dropped in MetaModels 3. Use the TableManipulator instead.
+     *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     protected function getMetaModelsSystemColumns()
     {
         return $GLOBALS['METAMODELS_SYSTEM_COLUMNS'];
+    }
+
+    /**
+     * @psalm-suppress DeprecatedMethod
+     */
+    private function getActiveLanguage(mixed $metaModel): string
+    {
+        if ($metaModel instanceof ITranslatedMetaModel) {
+            return $metaModel->getLanguage();
+        }
+        if ($metaModel->isTranslated(false)) {
+            return $metaModel->getActiveLanguage(false);
+        }
+        throw new RuntimeException('How shall I save to an untranslated MetaModel?');
     }
 }
