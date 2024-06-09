@@ -41,7 +41,7 @@
       <trans-unit id="talias_fields.description" resname="talias_fields.description">
         <source>Please select one or more attributes to combine a alias.</source>
       </trans-unit>
-      <trans-unit id="field_attribute" resname="field_attribute">
+      <trans-unit id="field_attribute.label" resname="field_attribute.label">
         <source>Attributes</source>
       </trans-unit>
       <trans-unit id="force_talias.label" resname="force_talias.label">
