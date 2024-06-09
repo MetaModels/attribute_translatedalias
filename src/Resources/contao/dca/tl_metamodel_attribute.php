@@ -61,18 +61,20 @@ if (class_exists(MetaModels\AttributeTranslatedTextBundle\Attribute\TranslatedTe
 }
 
 $GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['force_talias'] = [
-    'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['force_alias'],
-    'exclude'   => true,
-    'inputType' => 'checkbox',
-    'default'   => '1',
-    'eval'      => [
+    'label'       => 'force_alias.label',
+    'description' => 'force_alias.description',
+    'exclude'     => true,
+    'inputType'   => 'checkbox',
+    'default'     => '1',
+    'eval'        => [
         'tl_class' => 'clr w50 cbx m12'
     ],
-    'sql'       => 'char(1) NOT NULL default \'\''
+    'sql'         => 'char(1) NOT NULL default \'\''
 ];
 
 $GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['validAliasCharacters'] = [
-    'label'            => &$GLOBALS['TL_LANG']['tl_page']['validAliasCharacters'],
+    'label'            => 'validAliasCharacters.label',
+    'description'      => 'validAliasCharacters.description',
     'exclude'          => true,
     'inputType'        => 'select',
     'options_callback' => static function () {
@@ -89,45 +91,51 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['validAliasCharacters'] =
 ];
 
 $GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['noIntegerPrefix'] = [
-    'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['noIntegerPrefix'],
-    'exclude'   => true,
-    'inputType' => 'checkbox',
-    'default'   => '1',
-    'sql'       => 'char(1) NOT NULL default \'\'',
-    'eval'      => [
+    'label'       => 'noIntegerPrefix.label',
+    'description' => 'noIntegerPrefix.description',
+    'exclude'     => true,
+    'inputType'   => 'checkbox',
+    'default'     => '1',
+    'sql'         => 'char(1) NOT NULL default \'\'',
+    'eval'        => [
         'tl_class' => 'clr w50 cbx m12'
     ],
 ];
 
 $GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['prepostfix_fields'] = [
-    'label'          => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['prepostfix_fields'],
+    'label'          => 'prepostfix_fields.label',
+    'description'    => 'prepostfix_fields.description',
     'exclude'        => true,
     'minCount'       => 1,
     'maxCount'       => 1,
     'disableSorting' => '1',
     'inputType'      => 'multiColumnWizard',
     'eval'           => [
-        'dragAndDrop'  => false,
-        'hideButtons'  => true,
-        'tl_class'     => 'clr clx w50',
-        'columnFields' => [
+        'dragAndDrop'   => false,
+        'hideButtons'   => true,
+        'tl_class'      => 'clr clx w50',
+        'useTranslator' => true,
+        'columnFields'  => [
             'prepostfix_language' => [
-                'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['prepostfix_language'],
-                'exclude'   => true,
-                'inputType' => 'justtextoption',
-                'eval'      => ['valign' => 'center']
+                'label'       => 'prepostfix_language.label',
+                'description' => 'prepostfix_language.description',
+                'exclude'     => true,
+                'inputType'   => 'justtextoption',
+                'eval'        => ['valign' => 'center']
             ],
             'talias_prefix'       => [
-                'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['talias_prefix'],
-                'exclude'   => true,
-                'inputType' => 'text',
-                'eval'      => ['style' => 'width:100%']
+                'label'       => 'talias_prefix.label',
+                'description' => 'talias_prefix.description',
+                'exclude'     => true,
+                'inputType'   => 'text',
+                'eval'        => ['style' => 'width:100%']
             ],
             'talias_postfix'      => [
-                'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['talias_postfix'],
-                'exclude'   => true,
-                'inputType' => 'text',
-                'eval'      => ['style' => 'width:100%']
+                'label'       => 'talias_postfix.label',
+                'description' => 'talias_postfix.description',
+                'exclude'     => true,
+                'inputType'   => 'text',
+                'eval'        => ['style' => 'width:100%']
             ],
         ],
     ],
@@ -135,23 +143,25 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['prepostfix_fields'] = [
 ];
 
 $GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['talias_fields'] = [
-    'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['talias_fields'],
-    'exclude'   => true,
-    'inputType' => 'multiColumnWizard',
-    'eval'      => [
+    'label'       => 'talias_fields.label',
+    'description' => 'talias_fields.description',
+    'exclude'     => true,
+    'inputType'   => 'multiColumnWizard',
+    'eval'        => [
         'tl_class'     => 'clr clx w50',
         'columnFields' => [
             'field_attribute' => [
-                'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['field_attribute'],
-                'exclude'   => true,
-                'inputType' => 'select',
-                'reference' => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['select_values'],
-                'eval'      => [
+                'label'       => 'field_attribute.label',
+                'description' => 'field_attribute.description',
+                'exclude'     => true,
+                'inputType'   => 'select',
+                'reference'   => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['select_values'],
+                'eval'        => [
                     'style'  => 'width:100%',
                     'chosen' => 'true'
                 ]
             ],
         ],
     ],
-    'sql'       => 'blob NULL'
+    'sql'         => 'blob NULL'
 ];
