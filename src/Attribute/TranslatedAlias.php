@@ -229,7 +229,7 @@ class TranslatedAlias extends TranslatedReference
                     return false;
                 }
 
-                return [] !== \array_diff($this->searchForInLanguages($alias, [$language]), [$itemId]);
+                return [] !== \array_diff($this->searchForInLanguages($alias, [$language]) ?? [], [$itemId]);
             },
             $this->get('noIntegerPrefix') ? '' : 'id-'
         );
