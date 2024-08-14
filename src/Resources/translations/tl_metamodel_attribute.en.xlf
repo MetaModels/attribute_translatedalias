@@ -2,6 +2,9 @@
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
   <file source-language="en" datatype="plaintext" original="src/Resources/translations/tl_metamodel_attribute.en.xlf">
     <body>
+      <trans-unit id="display_legend" resname="display_legend">
+        <source>Display settings</source>
+      </trans-unit>
       <trans-unit id="typeOptions.translatedalias" resname="typeOptions.translatedalias">
         <source>Translated alias</source>
       </trans-unit>
@@ -9,7 +12,7 @@
         <source>No integer prefix</source>
       </trans-unit>
       <trans-unit id="noIntegerPrefix.description" resname="noIntegerPrefix.description">
-        <source>Trim the "id-" prefix for alias that are numeric.</source>
+        <source>Do not set an "id-" prefix if the resulting alias is numeric.</source>
       </trans-unit>
       <trans-unit id="prepostfix_fields.label" resname="prepostfix_fields.label">
         <source>Alias prefix and postfix</source>
@@ -49,6 +52,36 @@
       </trans-unit>
       <trans-unit id="force_talias.description" resname="force_talias.description">
         <source>Check this, if you want the alias to be regenerated whenever any of the dependant fields is changed. Note that this will invalidate old urls that are based upon the alias.</source>
+      </trans-unit>
+      <trans-unit id="validAliasCharacters.label" resname="validAliasCharacters.label">
+        <source>Valid alias characters</source>
+      </trans-unit>
+      <trans-unit id="validAliasCharacters.description" resname="validAliasCharacters.description">
+        <source>Here you can select a custom character set for auto-generated aliases.</source>
+      </trans-unit>
+      <trans-unit id="select_values.meta" resname="select_values.meta">
+        <source>Metafields</source>
+      </trans-unit>
+      <trans-unit id="select_values.attributes" resname="select_values.attributes">
+        <source>Attributes</source>
+      </trans-unit>
+      <trans-unit id="select_values.id" resname="select_values.id">
+        <source>ID</source>
+      </trans-unit>
+      <trans-unit id="select_values.pid" resname="select_values.pid">
+        <source>PID</source>
+      </trans-unit>
+      <trans-unit id="select_values.sorting" resname="select_values.sorting">
+        <source>Sorting</source>
+      </trans-unit>
+      <trans-unit id="select_values.tstamp" resname="select_values.tstamp">
+        <source>Timestamp</source>
+      </trans-unit>
+      <trans-unit id="select_values.vargroup" resname="select_values.vargroup">
+        <source>Vargroup</source>
+      </trans-unit>
+      <trans-unit id="select_values.varbase" resname="select_values.varbase">
+        <source>Varbase</source>
       </trans-unit>
     </body>
   </file>
