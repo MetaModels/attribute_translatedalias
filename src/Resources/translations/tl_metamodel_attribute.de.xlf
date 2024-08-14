@@ -1,6 +1,10 @@
 <?xml version="1.0" ?><xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
   <file source-language="en" datatype="plaintext" original="src/Resources/translations/tl_metamodel_attribute.en.xlf" target-language="de">
     <body>
+      <trans-unit id="display_legend" resname="display_legend">
+        <source>Display settings</source>
+        <target>Anzeigeeinstellungen</target>
+      </trans-unit>
       <trans-unit id="typeOptions.translatedalias" resname="typeOptions.translatedalias">
         <source>Translated alias</source>
         <target>Übersetzter Alias</target>
@@ -10,8 +14,8 @@
         <target>Kein Integer-Präfix</target>
       </trans-unit>
       <trans-unit id="noIntegerPrefix.description" resname="noIntegerPrefix.description">
-        <source>Trim the &quot;id-&quot; prefix for alias that are numeric.</source>
-        <target>Entfernt das Präfix &quot;id-&quot; bei numerischen Aliasen.</target>
+        <source>Do not set an &quot;id-&quot; prefix if the resulting alias is numeric.</source>
+        <target>Setzt kein &quot;id-&quot;-Präfix, wenn der resultierende Alias numerisch ist.</target>
       </trans-unit>
       <trans-unit id="prepostfix_fields.label" resname="prepostfix_fields.label">
         <source>Alias prefix and postfix</source>
@@ -64,6 +68,46 @@
       <trans-unit id="force_talias.description" resname="force_talias.description">
         <source>Check this, if you want the alias to be regenerated whenever any of the dependant fields is changed. Note that this will invalidate old urls that are based upon the alias.</source>
         <target>Auswählen, um eine Neuerstellung des Alias zu erzwingen, wenn sich eines der abhängigen Felder ändert. Beachten Sie, dass bisherige URLs dadurch ungültig werden können.</target>
+      </trans-unit>
+      <trans-unit id="validAliasCharacters.label" resname="validAliasCharacters.label">
+        <source>Valid alias characters</source>
+        <target>Zeitstempel</target>
+      </trans-unit>
+      <trans-unit id="validAliasCharacters.description" resname="validAliasCharacters.description">
+        <source>Here you can select a custom character set for auto-generated aliases.</source>
+        <target>Hier können Sie einen benutzerdefinierten Zeichensatz für automatisch generierte Aliase auswählen.</target>
+      </trans-unit>
+      <trans-unit id="select_values.meta" resname="select_values.meta">
+        <source>Metafields</source>
+        <target>Metafelder</target>
+      </trans-unit>
+      <trans-unit id="select_values.attributes" resname="select_values.attributes">
+        <source>Attributes</source>
+        <target>Attribute</target>
+      </trans-unit>
+      <trans-unit id="select_values.id" resname="select_values.id">
+        <source>ID</source>
+        <target>ID</target>
+      </trans-unit>
+      <trans-unit id="select_values.pid" resname="select_values.pid">
+        <source>PID</source>
+        <target>PID</target>
+      </trans-unit>
+      <trans-unit id="select_values.sorting" resname="select_values.sorting">
+        <source>Sorting</source>
+        <target>Sortierung</target>
+      </trans-unit>
+      <trans-unit id="select_values.tstamp" resname="select_values.tstamp">
+        <source>Timestamp</source>
+        <target>Zeitstempel</target>
+      </trans-unit>
+      <trans-unit id="select_values.vargroup" resname="select_values.vargroup">
+        <source>Vargroup</source>
+        <target>Variantengruppe</target>
+      </trans-unit>
+      <trans-unit id="select_values.varbase" resname="select_values.varbase">
+        <source>Varbase</source>
+        <target>Variantenbasis</target>
       </trans-unit>
     </body>
   </file>
