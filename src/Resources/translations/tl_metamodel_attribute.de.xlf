@@ -71,7 +71,7 @@
       </trans-unit>
       <trans-unit id="validAliasCharacters.label" resname="validAliasCharacters.label">
         <source>Valid alias characters</source>
-        <target>Zeitstempel</target>
+        <target>Gültige Alias-Zeichen</target>
       </trans-unit>
       <trans-unit id="validAliasCharacters.description" resname="validAliasCharacters.description">
         <source>Here you can select a custom character set for auto-generated aliases.</source>
