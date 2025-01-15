@@ -151,6 +151,7 @@ class TranslatedAlias extends TranslatedReference
         if ($this->get('force_talias')) {
             $arrFieldDef['eval']['alwaysSave'] = true;
             $arrFieldDef['eval']['readonly']   = true;
+            $arrFieldDef['eval']['doNotCopy']  = true;
         }
 
         return $arrFieldDef;
