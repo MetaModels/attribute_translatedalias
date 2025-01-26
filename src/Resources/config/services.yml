@@ -33,10 +33,21 @@ services:
         event: dc-general.view.contao2backend.encode-property-value-from-widget
         method: encodeValue
 
-  MetaModels\AttributeTranslatedAliasBundle\EventListener\SetUniqueAsDefaultListener:
+  MetaModels\AttributeTranslatedAliasBundle\EventListener\SetDefaultValuesAtCheckboxesListener:
     arguments:
       - '@cca.dc-general.scope-matcher'
+      - '@metamodels.factory'
+      - '@translator'
     tags:
       - name: kernel.event_listener
         event: dc-general.view.contao2backend.build-widget
         method: buildWidget
+      - name: kernel.event_listener
+        event: dc-general.model.validate
+        method: onValidateModel
+
+  MetaModels\AttributeTranslatedAliasBundle\Migration\FindUniqueInVariantsMigration:
+    arguments:
+      - '@database_connection'
+    tags:
+      - name: contao.migration
