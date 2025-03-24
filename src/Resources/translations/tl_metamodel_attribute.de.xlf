@@ -109,6 +109,42 @@
         <source>Varbase</source>
         <target>Variantenbasis</target>
       </trans-unit>
+      <trans-unit id="validAliasCharacters_headline" resname="validAliasCharacters_headline">
+        <source>Supported character sets that can be used when generating alias values.</source>
+        <target>Unterstützte Zeichensätze, die bei der Erzeugung von Alias-Werten verwendet werden können.</target>
+      </trans-unit>
+      <trans-unit id="validAliasCharacters_unicode_nsl.caption" resname="validAliasCharacters_unicode_nsl.caption">
+        <source>Unicode numbers and small letters</source>
+        <target>Unicode-Zahlen und -Kleinbuchstaben</target>
+      </trans-unit>
+      <trans-unit id="validAliasCharacters_unicode_nsl.description" resname="validAliasCharacters_unicode_nsl.description">
+        <source>From the page name &quot;Über uns&quot; the alias &quot;über-uns&quot; is generated.</source>
+        <target>Aus dem Seitennamen &quot;Über uns&quot; wird der Alias &quot;über-uns&quot; erzeugt.</target>
+      </trans-unit>
+      <trans-unit id="validAliasCharacters_unicode_nl.caption" resname="validAliasCharacters_unicode_nl.caption">
+        <source>Unicode numbers and letters</source>
+        <target>Unicode-Zahlen und -Buchstaben</target>
+      </trans-unit>
+      <trans-unit id="validAliasCharacters_unicode_nl.description" resname="validAliasCharacters_unicode_nl.description">
+        <source>From the page name &quot;Über uns&quot; the alias &quot;Über-uns&quot; is generated.</source>
+        <target>Aus dem Seitennamen &quot;Über uns&quot; wird der Alias &quot;Über-uns&quot; erzeugt.</target>
+      </trans-unit>
+      <trans-unit id="validAliasCharacters_ascii_nsl.caption" resname="validAliasCharacters_ascii_nsl.caption">
+        <source>ASCII numbers and small letters</source>
+        <target>ASCII-Zahlen und -Kleinbuchstaben</target>
+      </trans-unit>
+      <trans-unit id="validAliasCharacters_ascii_nsl.description" resname="validAliasCharacters_ascii_nsl.description">
+        <source>From the page name &quot;Über uns&quot; the alias &quot;ueber-uns&quot; is generated.</source>
+        <target>Aus dem Seitennamen &quot;Über uns&quot; wird der Alias &quot;ueber-uns&quot; erzeugt.</target>
+      </trans-unit>
+      <trans-unit id="validAliasCharacters_ascii_nl.caption" resname="validAliasCharacters_ascii_nl.caption">
+        <source>ASCII numbers and letters</source>
+        <target>ASCII-Zahlen und -Buchstaben</target>
+      </trans-unit>
+      <trans-unit id="validAliasCharacters_ascii_nl.description" resname="validAliasCharacters_ascii_nl.description">
+        <source>From the page name &quot;Über uns&quot; the alias &quot;Ueber-uns&quot; is generated.</source>
+        <target>Aus dem Seitennamen &quot;Über uns&quot; wird der Alias &quot;Ueber-uns&quot; erzeugt.</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
