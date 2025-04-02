@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/attribute_translatedalias.
  *
- * (c) 2012-2021 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,7 +18,7 @@
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
- * @copyright  2012-2021 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_translatedalias/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -34,6 +34,8 @@ use Doctrine\DBAL\Connection;
 use MetaModels\Attribute\TranslatedReference;
 use MetaModels\IItem;
 use MetaModels\IMetaModel;
+use MetaModels\ITranslatedMetaModel;
+use RuntimeException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -46,32 +48,28 @@ class TranslatedAlias extends TranslatedReference
      *
      * @var SlugGenerator
      */
-    private $slugGenerator;
+    private SlugGenerator $slugGenerator;
 
     /**
      * The event dispatcher.
      *
      * @var EventDispatcherInterface
      */
-    private $eventDispatcher;
+    private EventDispatcherInterface $eventDispatcher;
 
     /**
      * Instantiate an MetaModel attribute.
      *
      * Note that you should not use this directly but use the factory classes to instantiate attributes.
      *
-     * @param IMetaModel               $objMetaModel    The MetaModel instance this attribute belongs to.
-     *
-     * @param array                    $arrData         The information array, for attribute information, refer to
-     *                                                  documentation of table tl_metamodel_attribute and documentation
-     *                                                  of the certain attribute classes for information what values are
-     *                                                  understood.
-     *
-     * @param Connection               $connection      Database connection.
-     *
-     * @param EventDispatcherInterface $eventDispatcher The event dispatcher.
-     *
-     * @param SlugGenerator            $slugGenerator   The Contao slug generator.
+     * @param IMetaModel                    $objMetaModel    The MetaModel instance this attribute belongs to.
+     * @param array                         $arrData         The information array, for attribute information, refer to
+     *                                                       documentation of table tl_metamodel_attribute and
+     *                                                       documentation of the certain attribute classes for
+     *                                                       information what values are understood.
+     * @param Connection|null               $connection      Database connection.
+     * @param EventDispatcherInterface|null $eventDispatcher The event dispatcher.
+     * @param SlugGenerator|null            $slugGenerator   The Contao slug generator.
      */
     public function __construct(
         IMetaModel $objMetaModel,
@@ -90,14 +88,20 @@ class TranslatedAlias extends TranslatedReference
             );
             // @codingStandardsIgnoreEnd
             $eventDispatcher = System::getContainer()->get('event_dispatcher');
+            assert($eventDispatcher instanceof EventDispatcherInterface);
         }
-
         $this->eventDispatcher = $eventDispatcher;
 
         if (null === $slugGenerator) {
+            // @codingStandardsIgnoreStart Silencing errors is discouraged
+            @\trigger_error(
+                'SlugGenerator is missing. It has to be passed in the constructor. Fallback will be dropped.',
+                E_USER_DEPRECATED
+            );
+            // @codingStandardsIgnoreEnd
             $slugGenerator = System::getContainer()->get('contao.slug');
+            assert($slugGenerator instanceof SlugGenerator);
         }
-
         $this->slugGenerator = $slugGenerator;
     }
 
@@ -147,6 +151,7 @@ class TranslatedAlias extends TranslatedReference
         if ($this->get('force_talias')) {
             $arrFieldDef['eval']['alwaysSave'] = true;
             $arrFieldDef['eval']['readonly']   = true;
+            $arrFieldDef['eval']['doNotCopy']  = true;
         }
 
         return $arrFieldDef;
@@ -169,6 +174,7 @@ class TranslatedAlias extends TranslatedReference
 
         $arrData = $this->widgetToValue($slug, $objItem->get('id'));
 
+        /** @psalm-suppress DeprecatedMethod */
         $this->setTranslatedDataFor(
             [
                 $objItem->get('id') => $arrData
@@ -183,7 +189,7 @@ class TranslatedAlias extends TranslatedReference
      */
     public function get($strKey)
     {
-        if ($strKey == 'force_alias') {
+        if ($strKey === 'force_alias') {
             $strKey = 'force_talias';
         }
         return parent::get($strKey);
@@ -193,7 +199,6 @@ class TranslatedAlias extends TranslatedReference
      * Generate a slug from the alias.
      *
      * @param string $alias  The alias.
-     *
      * @param string $itemId The item id to check for duplicates.
      *
      * @return string The generated slug.
@@ -201,9 +206,14 @@ class TranslatedAlias extends TranslatedReference
     private function generateSlug(string $alias, string $itemId): string
     {
         $replaceEvent = new ReplaceInsertTagsEvent($alias);
-        $this->eventDispatcher->dispatch($replaceEvent, ContaoEvents::CONTROLLER_REPLACE_INSERT_TAGS);
+        $dispatcher   = $this->eventDispatcher;
+        assert($dispatcher instanceof EventDispatcherInterface);
+        $dispatcher->dispatch($replaceEvent, ContaoEvents::CONTROLLER_REPLACE_INSERT_TAGS);
 
-        $language    = $this->getMetaModel()->getActiveLanguage();
+        $metaModel = $this->getMetaModel();
+        $language  = $this->getActiveLanguage($metaModel);
+        assert('' !== $language);
+
         $slugOptions = ['locale' => $language];
 
         if ($this->get('validAliasCharacters')) {
@@ -220,14 +230,19 @@ class TranslatedAlias extends TranslatedReference
                     return false;
                 }
 
-                return [] !== \array_diff($this->searchForInLanguages($alias, [$language]), [$itemId]);
+                return [] !== \array_diff($this->searchForInLanguages($alias, [$language]) ?? [], [$itemId]);
             },
             $this->get('noIntegerPrefix') ? '' : 'id-'
         );
 
-        if (\is_numeric($slug[0]) && !$this->get('validAliasCharacters')) {
+        if (
+            '' !== $slug
+            && \is_numeric($slug[0])
+            && !$this->get('validAliasCharacters')
+            && !$this->get('noIntegerPrefix')
+        ) {
             // BC mode. In prior versions, StringUtil::standardize was used to generate the alias
-            // which always added an prefix for aliases starting with a number.
+            // which always added a prefix for aliases starting with a number.
             $slug = 'id-' . $slug;
         }
 
@@ -243,14 +258,17 @@ class TranslatedAlias extends TranslatedReference
      */
     private function generateAlias(IItem $objItem): string
     {
-        $activeLanguage = $this->getMetaModel()->getActiveLanguage();
-        $parts          = [];
+        $metaModel      = $this->getMetaModel();
+        $activeLanguage = $this->getActiveLanguage($metaModel);
+        assert('' !== $activeLanguage);
+
+        $parts = [];
 
         if (!empty($this->get('prepostfix_fields')[$activeLanguage]['talias_prefix'])) {
             $parts[] = $this->get('prepostfix_fields')[$activeLanguage]['talias_prefix'];
         }
 
-        foreach (\deserialize($this->get('talias_fields')) as $aliasField) {
+        foreach (StringUtil::deserialize($this->get('talias_fields')) as $aliasField) {
             if ($this->isMetaField($aliasField['field_attribute'])) {
                 $attribute = $aliasField['field_attribute'];
                 $parts[]   = $objItem->get($attribute);
@@ -279,6 +297,7 @@ class TranslatedAlias extends TranslatedReference
     {
         $strField = \trim($strField);
 
+        /** @psalm-suppress DeprecatedMethod */
         if (\in_array($strField, $this->getMetaModelsSystemColumns())) {
             return true;
         }
@@ -291,11 +310,27 @@ class TranslatedAlias extends TranslatedReference
      *
      * @return mixed Global MetaModels System Columns
      *
+     * @deprecated Method will be dropped in MetaModels 3. Use the TableManipulator instead.
+     *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     protected function getMetaModelsSystemColumns()
     {
         return $GLOBALS['METAMODELS_SYSTEM_COLUMNS'];
+    }
+
+    /**
+     * @psalm-suppress DeprecatedMethod
+     */
+    private function getActiveLanguage(mixed $metaModel): string
+    {
+        if ($metaModel instanceof ITranslatedMetaModel) {
+            return $metaModel->getLanguage();
+        }
+        if ($metaModel->isTranslated(false)) {
+            return $metaModel->getActiveLanguage(false);
+        }
+        throw new RuntimeException('How shall I save to an untranslated MetaModel?');
     }
 }

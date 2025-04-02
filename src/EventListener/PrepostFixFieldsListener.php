@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/attribute_translatedalias.
  *
- * (c) 2012-2021 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,7 @@
  * @package    MetaModels/attribute_translatedalias
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2021 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_translatedalias/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -25,10 +25,12 @@ use ContaoCommunityAlliance\DcGeneral\Contao\RequestScopeDeterminator;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\BuildWidgetEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\DecodePropertyValueForWidgetEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\EncodePropertyValueFromWidgetEvent;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\ContainerInterface;
 use ContaoCommunityAlliance\DcGeneral\Event\AbstractEnvironmentAwareEvent;
 use ContaoCommunityAlliance\DcGeneral\Event\AbstractModelAwareEvent;
 use MetaModels\IFactory;
-use Symfony\Component\Translation\TranslatorInterface;
+use MetaModels\IMetaModel;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * This handles the prefix and postfix options.
@@ -40,21 +42,21 @@ class PrepostFixFieldsListener
      *
      * @var IFactory
      */
-    private $factory;
+    private IFactory $factory;
 
     /**
      * The translator.
      *
      * @var TranslatorInterface
      */
-    private $translator;
+    private TranslatorInterface $translator;
 
     /**
      * The scope determinator.
      *
      * @var RequestScopeDeterminator
      */
-    private $scopeDeterminator;
+    private RequestScopeDeterminator $scopeDeterminator;
 
     /**
      * Create a new instance.
@@ -86,15 +88,20 @@ class PrepostFixFieldsListener
             return;
         }
 
-        $propInfo =
-            $event->getEnvironment()->getDataDefinition()->getPropertiesDefinition()->getProperty('prepostfix_fields');
+        $dataDefinition = $event->getEnvironment()->getDataDefinition();
+        assert($dataDefinition instanceof ContainerInterface);
+
+        $propInfo = $dataDefinition->getPropertiesDefinition()->getProperty('prepostfix_fields');
         $value    = StringUtil::deserialize($event->getValue(), true);
         $extra    = $propInfo->getExtra();
+        assert(\is_array($value));
 
         $newValues = [];
         $languages = $extra['columnFields']['prepostfix_language']['options'];
-        foreach (array_keys($languages) as $key) {
-            if ($thisValue = ($value[$key] ?? null)) {
+        assert(\is_array($languages));
+        foreach (\array_keys($languages) as $key) {
+            if (null !== $thisValue = ($value[(string) $key] ?? null)) {
+                assert(\is_array($thisValue));
                 $newValues[] = [
                     'prepostfix_language' => $key,
                     'talias_prefix'       => $thisValue['talias_prefix'],
@@ -157,15 +164,17 @@ class PrepostFixFieldsListener
         $model     = $event->getModel();
         $metaModel =
             $this->factory->getMetaModel($this->factory->translateIdToMetaModelName($model->getProperty('pid')));
+        assert($metaModel instanceof IMetaModel);
 
         $extra = $event->getProperty()->getExtra();
 
         $arrLanguages = [];
-        foreach ((array) $metaModel->getAvailableLanguages() as $strLangCode) {
+        /** @psalm-suppress DeprecatedMethod */
+        foreach ($metaModel->getAvailableLanguages() ?? [] as $strLangCode) {
             $arrLanguages[$strLangCode] = $this->translator
                 ->trans('LNG.' . $strLangCode, [], 'contao_languages');
         }
-        asort($arrLanguages);
+        \asort($arrLanguages);
 
         $extra['minCount'] = count($arrLanguages);
         $extra['maxCount'] = count($arrLanguages);
@@ -188,13 +197,15 @@ class PrepostFixFieldsListener
             return false;
         }
 
-        $environment = $event->getEnvironment();
-        if ('tl_metamodel_attribute' !== $environment->getDataDefinition()->getName()) {
+        $dataDefinition = $event->getEnvironment()->getDataDefinition();
+        assert($dataDefinition instanceof ContainerInterface);
+
+        if ('tl_metamodel_attribute' !== $dataDefinition->getName()) {
             return false;
         }
 
         if ($event instanceof AbstractModelAwareEvent) {
-            if ($event->getEnvironment()->getDataDefinition()->getName() !== $event->getModel()->getProviderName()) {
+            if ($dataDefinition->getName() !== $event->getModel()->getProviderName()) {
                 return false;
             }
         }

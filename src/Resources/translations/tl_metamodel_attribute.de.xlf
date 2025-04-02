@@ -1,0 +1,150 @@
+<?xml version="1.0" ?><xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="en" datatype="plaintext" original="src/Resources/translations/tl_metamodel_attribute.en.xlf" target-language="de">
+    <body>
+      <trans-unit id="display_legend" resname="display_legend">
+        <source>Display settings</source>
+        <target>Anzeigeeinstellungen</target>
+      </trans-unit>
+      <trans-unit id="typeOptions.translatedalias" resname="typeOptions.translatedalias">
+        <source>Translated alias</source>
+        <target>Übersetzter Alias</target>
+      </trans-unit>
+      <trans-unit id="noIntegerPrefix.label" resname="noIntegerPrefix.label">
+        <source>No integer prefix</source>
+        <target>Kein Integer-Präfix</target>
+      </trans-unit>
+      <trans-unit id="noIntegerPrefix.description" resname="noIntegerPrefix.description">
+        <source>Do not set an &quot;id-&quot; prefix if the resulting alias is numeric.</source>
+        <target>Setzt kein &quot;id-&quot;-Präfix, wenn der resultierende Alias numerisch ist.</target>
+      </trans-unit>
+      <trans-unit id="prepostfix_fields.label" resname="prepostfix_fields.label">
+        <source>Alias prefix and postfix</source>
+        <target>Alias-Präfix und -Postfix</target>
+      </trans-unit>
+      <trans-unit id="prepostfix_fields.description" resname="prepostfix_fields.description">
+        <source>Please enter optional prefix and/or postfix.</source>
+        <target>Bitte geben Sie optional Präfix und/oder Postfix ein.</target>
+      </trans-unit>
+      <trans-unit id="prepostfix_language.label" resname="prepostfix_language.label">
+        <source>Language</source>
+        <target>Sprache</target>
+      </trans-unit>
+      <trans-unit id="prepostfix_language.description" resname="prepostfix_language.description">
+        <source>Language</source>
+        <target>Sprache</target>
+      </trans-unit>
+      <trans-unit id="talias_prefix.label" resname="talias_prefix.label">
+        <source>Alias prefix</source>
+        <target>Alias-Präfix</target>
+      </trans-unit>
+      <trans-unit id="talias_prefix.description" resname="talias_prefix.description">
+        <source>Optionally add a prefix term.</source>
+        <target>Optionale Angabe eines Präfix für die Erstellung des Alias.</target>
+      </trans-unit>
+      <trans-unit id="talias_postfix.label" resname="talias_postfix.label">
+        <source>Alias postfix</source>
+        <target>Alias-Postfix</target>
+      </trans-unit>
+      <trans-unit id="talias_postfix.description" resname="talias_postfix.description">
+        <source>Optionally add a postfix term.</source>
+        <target>Optionale Angabe eines Postfix für die Erstellung des Alias.</target>
+      </trans-unit>
+      <trans-unit id="talias_fields.label" resname="talias_fields.label">
+        <source>Alias fields</source>
+        <target>Alias-Felder</target>
+      </trans-unit>
+      <trans-unit id="talias_fields.description" resname="talias_fields.description">
+        <source>Please select one or more attributes to combine a alias.</source>
+        <target>Bitte wählen Sie eines oder mehrere Attribute, um daraus einen Alias zu bilden.</target>
+      </trans-unit>
+      <trans-unit id="field_attribute.label" resname="field_attribute.label">
+        <source>Attributes</source>
+        <target>Attribute</target>
+      </trans-unit>
+      <trans-unit id="force_talias.label" resname="force_talias.label">
+        <source>Force alias regenerating</source>
+        <target>Neuerstellung des Alias erzwingen.</target>
+      </trans-unit>
+      <trans-unit id="force_talias.description" resname="force_talias.description">
+        <source>Check this, if you want the alias to be regenerated whenever any of the dependant fields is changed. Note that this will invalidate old urls that are based upon the alias.</source>
+        <target>Auswählen, um eine Neuerstellung des Alias zu erzwingen, wenn sich eines der abhängigen Felder ändert. Beachten Sie, dass bisherige URLs dadurch ungültig werden können.</target>
+      </trans-unit>
+      <trans-unit id="validAliasCharacters.label" resname="validAliasCharacters.label">
+        <source>Valid alias characters</source>
+        <target>Gültige Alias-Zeichen</target>
+      </trans-unit>
+      <trans-unit id="validAliasCharacters.description" resname="validAliasCharacters.description">
+        <source>Here you can select a custom character set for auto-generated aliases.</source>
+        <target>Hier können Sie einen benutzerdefinierten Zeichensatz für automatisch generierte Aliase auswählen.</target>
+      </trans-unit>
+      <trans-unit id="select_values.meta" resname="select_values.meta">
+        <source>Metafields</source>
+        <target>Metafelder</target>
+      </trans-unit>
+      <trans-unit id="select_values.attributes" resname="select_values.attributes">
+        <source>Attributes</source>
+        <target>Attribute</target>
+      </trans-unit>
+      <trans-unit id="select_values.id" resname="select_values.id">
+        <source>ID</source>
+        <target>ID</target>
+      </trans-unit>
+      <trans-unit id="select_values.pid" resname="select_values.pid">
+        <source>PID</source>
+        <target>PID</target>
+      </trans-unit>
+      <trans-unit id="select_values.sorting" resname="select_values.sorting">
+        <source>Sorting</source>
+        <target>Sortierung</target>
+      </trans-unit>
+      <trans-unit id="select_values.tstamp" resname="select_values.tstamp">
+        <source>Timestamp</source>
+        <target>Zeitstempel</target>
+      </trans-unit>
+      <trans-unit id="select_values.vargroup" resname="select_values.vargroup">
+        <source>Vargroup</source>
+        <target>Variantengruppe</target>
+      </trans-unit>
+      <trans-unit id="select_values.varbase" resname="select_values.varbase">
+        <source>Varbase</source>
+        <target>Variantenbasis</target>
+      </trans-unit>
+      <trans-unit id="validAliasCharacters_headline" resname="validAliasCharacters_headline">
+        <source>Supported character sets that can be used when generating alias values.</source>
+        <target>Unterstützte Zeichensätze, die bei der Erzeugung von Alias-Werten verwendet werden können.</target>
+      </trans-unit>
+      <trans-unit id="validAliasCharacters_unicode_nsl.caption" resname="validAliasCharacters_unicode_nsl.caption">
+        <source>Unicode numbers and small letters</source>
+        <target>Unicode-Zahlen und -Kleinbuchstaben</target>
+      </trans-unit>
+      <trans-unit id="validAliasCharacters_unicode_nsl.description" resname="validAliasCharacters_unicode_nsl.description">
+        <source>From the page name &quot;Über uns&quot; the alias &quot;über-uns&quot; is generated.</source>
+        <target>Aus dem Seitennamen &quot;Über uns&quot; wird der Alias &quot;über-uns&quot; erzeugt.</target>
+      </trans-unit>
+      <trans-unit id="validAliasCharacters_unicode_nl.caption" resname="validAliasCharacters_unicode_nl.caption">
+        <source>Unicode numbers and letters</source>
+        <target>Unicode-Zahlen und -Buchstaben</target>
+      </trans-unit>
+      <trans-unit id="validAliasCharacters_unicode_nl.description" resname="validAliasCharacters_unicode_nl.description">
+        <source>From the page name &quot;Über uns&quot; the alias &quot;Über-uns&quot; is generated.</source>
+        <target>Aus dem Seitennamen &quot;Über uns&quot; wird der Alias &quot;Über-uns&quot; erzeugt.</target>
+      </trans-unit>
+      <trans-unit id="validAliasCharacters_ascii_nsl.caption" resname="validAliasCharacters_ascii_nsl.caption">
+        <source>ASCII numbers and small letters</source>
+        <target>ASCII-Zahlen und -Kleinbuchstaben</target>
+      </trans-unit>
+      <trans-unit id="validAliasCharacters_ascii_nsl.description" resname="validAliasCharacters_ascii_nsl.description">
+        <source>From the page name &quot;Über uns&quot; the alias &quot;ueber-uns&quot; is generated.</source>
+        <target>Aus dem Seitennamen &quot;Über uns&quot; wird der Alias &quot;ueber-uns&quot; erzeugt.</target>
+      </trans-unit>
+      <trans-unit id="validAliasCharacters_ascii_nl.caption" resname="validAliasCharacters_ascii_nl.caption">
+        <source>ASCII numbers and letters</source>
+        <target>ASCII-Zahlen und -Buchstaben</target>
+      </trans-unit>
+      <trans-unit id="validAliasCharacters_ascii_nl.description" resname="validAliasCharacters_ascii_nl.description">
+        <source>From the page name &quot;Über uns&quot; the alias &quot;Ueber-uns&quot; is generated.</source>
+        <target>Aus dem Seitennamen &quot;Über uns&quot; wird der Alias &quot;Ueber-uns&quot; erzeugt.</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
